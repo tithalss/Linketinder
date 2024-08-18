@@ -21,6 +21,6 @@ class Empresa {
 
     @Override
     String toString() {
-        return "Nome: ${nome}, Email: ${email}, CNPJ: ${cnpj}, País: ${pais}, Estado: ${estado}, CEP: ${cep}, Descrição: ${descricao}, Competencias desejadas: ${competencias.join(', ')}"
+        return "Nome: ${nome}, Email: ${email}, CNPJ: ${cnpj}, País: ${pais}, Estado: ${estado}, CEP: ${cep}, Descrição: ${descricao}, Competências desejadas: ${competencias.join(', ')}"
     }
 }

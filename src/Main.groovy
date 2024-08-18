@@ -1,10 +1,10 @@
 class Main {
     static def listaCandidatos = [
             new Candidato("Cristiano Ronaldo", "cr7@outlook.com", "777.777.777-77", 39, "PT", "01234-567", "Python Developer", ["Python", "Django", "Flask", "Tensorflow"]),
-            new Candidato("Michael Corleone", "thegodfather@acelerazg.com", "123.777.777-77", 59, "IT", "01235-568", "Data Scientist", ["Python", "R", "Machine Learning", "Tensorflow"]),
+            new Candidato("Michael Corleone", "thegodfather@acelerazg.com.br", "123.777.777-77", 59, "IT", "01235-568", "Data Scientist", ["Python", "R", "Machine Learning", "Tensorflow"]),
             new Candidato("Tony Stark", "ironman@starkindustries.com", "222.333.444-55", 48, "US", "56789-012", "Software Engineer", ["C++", "Java", "Artificial Intelligence", "Quantum Computing"]),
-            new Candidato("Walter White", "heisenberg@chemistry.com", "888.999.000-11", 52, "US", "34567-890", "Chemistry Expert", ["Chemistry", "Python", "Data Analysis", "Pharmaceuticals"]),
-            new Candidato("Robert Plant", "robertoplanta@hogwarts.edu", "555.666.777-88", 35, "UK", "23456-789", "Full Stack Developer", ["JavaScript", "Java", "React", "Spring"])
+            new Candidato("Walter Kovacs", "rorsh@watch.com", "888.999.000-11", 52, "US", "34567-890", "Chemistry Expert", ["Chemistry", "Python", "Data Analysis", "Pharmaceuticals"]),
+            new Candidato("Robert Plant", "robertoplanta@led.edu", "555.666.777-88", 35, "UK", "23456-789", "Full Stack Developer", ["JavaScript", "Java", "React", "Spring"])
     ]
 
     static def listaEmpresas = [
