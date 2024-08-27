@@ -1,4 +1,4 @@
-export function createLoginForm(): HTMLElement {
+function createLoginForm(): HTMLElement {
     const container = document.createElement('div');
     container.classList.add('login-container');
 
@@ -18,11 +18,13 @@ export function createLoginForm(): HTMLElement {
     const loginButton = document.createElement('button');
     loginButton.textContent = 'Entrar';
 
-    const registerAsCompanyButton = document.createElement('button');
+    const registerAsCompanyButton = document.createElement('a');
     registerAsCompanyButton.textContent = 'Cadastrar como Empresa';
+    registerAsCompanyButton.href = 'formularioEmpresa.html'; // Substitua pelo caminho da sua página de cadastro de empresa
 
-    const registerAsCandidateButton = document.createElement('button');
+    const registerAsCandidateButton = document.createElement('a');
     registerAsCandidateButton.textContent = 'Cadastrar como Candidato';
+    registerAsCandidateButton.href = 'formularioCandidato.html'; // Substitua pelo caminho da sua página de cadastro de candidato
 
     container.appendChild(logo);
     container.appendChild(usernameInput);
@@ -38,3 +40,10 @@ export function createLoginForm(): HTMLElement {
 
     return container;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const app = document.querySelector('body');
+    if (app) {
+        app.appendChild(createLoginForm());
+    }
+});

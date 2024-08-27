@@ -3,7 +3,11 @@ const path = require('path');
 module.exports = {
   mode: 'production',  
   entry: {
-    index: ['./src/index.ts'],
+    login: ['./src/components/login.ts'],
+    formularioEmpresa: ['./src/components/formularioEmpresa.ts'],
+    formularioCandidato: ['./src/components/formularioCandidato.ts'],
+    listaCandidatos: ['./src/components/listaCandidatos.ts'],
+    listaVagas: ['./src/components/listaVagas.ts'],
   },
   module: {
     rules: [
