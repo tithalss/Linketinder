@@ -17,11 +17,11 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     max-width: 350px;
     width: 100%;
-    text-align: center; /* Centraliza o conteúdo */
+    text-align: center;
 }
 
 .login-logo {
-    width: 135px; /* Ajuste o tamanho conforme necessário */
+    width: 135px;
     height: auto;
     margin-bottom: 5px;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 .login-container input {
-    width: calc(100% - 20px); /* Ajusta a largura para considerar o padding */
+    width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -149,4 +149,76 @@ body {
 
 .form-container .back-link:hover {
     text-decoration: underline;
+}
+
+.form-container button {
+    width: 41%;
+    padding: 10px;
+    background-color: #00b318;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: block;
+}
+
+.form-container button:hover {
+    background-color: #008d0c;
+}
+
+/* Lista de Vagas */
+.job-listing-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.job-card {
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.job-card h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.job-card p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    transition: color 0.3s ease;
+}
+
+.like-button.empty {
+    color: #242424;
+}
+
+.like-button.filled {
+    color: red;
+}
+
+/* CHART */
+.chart-container {
+    background-color: white;
+    width: 25%;
+    justify-content: right;
+    display: flex;
+    margin: 50px auto;
 }

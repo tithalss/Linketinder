@@ -1,6 +1,7 @@
 function createCompanyForm(): HTMLElement {
     const form = document.createElement('form');
     form.classList.add('form-container');
+    form.action = "listaCandidatos";
 
     // Campo para Nome da Empresa
     const nomeLabel = document.createElement('label');

@@ -1,6 +1,7 @@
 function createCandidateForm(): HTMLElement {
     const form = document.createElement('form');
     form.classList.add('form-container');
+    form.action = "listaVagas.html";
 
     // Campo para Nome Completo
     const nomeLabel = document.createElement('label');
@@ -68,7 +69,7 @@ function createCandidateForm(): HTMLElement {
 
     // Botão de Submissão
     const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
+    submitButton.type = "submit";
     submitButton.textContent = 'Cadastrar';
 
     // Adicionando os campos ao formulário
