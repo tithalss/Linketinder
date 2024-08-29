@@ -1,102 +1,44 @@
-function createCompanyForm(): HTMLElement {
-    const form = document.createElement('form');
-    form.classList.add('form-container');
-    form.action = "listaCandidatos";
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formulario-empresa") as HTMLFormElement;
 
-    // Campo para Nome da Empresa
-    const nomeLabel = document.createElement('label');
-    nomeLabel.textContent = 'Nome da Empresa:';
-    const nomeInput = document.createElement('input');
-    nomeInput.type = 'text';
-    nomeInput.name = 'nome';
-    nomeInput.required = true;
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
 
-    // Campo para Email
-    const emailLabel = document.createElement('label');
-    emailLabel.textContent = 'Email:';
-    const emailInput = document.createElement('input');
-    emailInput.type = 'email';
-    emailInput.name = 'email';
-    emailInput.required = true;
+        const nome = (document.getElementById("nome") as HTMLInputElement).value;
+        const email = (document.getElementById("email") as HTMLInputElement).value;
+        const cnpj = (document.getElementById("cnpj") as HTMLInputElement).value;
+        const pais = (document.getElementById("pais") as HTMLInputElement).value;
+        const estado = (document.getElementById("estado") as HTMLInputElement).value;
+        const cep = (document.getElementById("cep") as HTMLInputElement).value;
+        const descricao = (document.getElementById("descricao") as HTMLInputElement).value;
 
-    // Campo para CNPJ
-    const cnpjLabel = document.createElement('label');
-    cnpjLabel.textContent = 'CNPJ:';
-    const cnpjInput = document.createElement('input');
-    cnpjInput.type = 'text';
-    cnpjInput.name = 'cnpj';
-    cnpjInput.required = true;
+        const empresa = {
+            id: Date.now(),
+            nome,
+            email,
+            cnpj,
+            pais,
+            estado,
+            cep,
+            descricao,
+        };
 
-    // Campo para País
-    const paisLabel = document.createElement('label');
-    paisLabel.textContent = 'País:';
-    const paisInput = document.createElement('input');
-    paisInput.type = 'text';
-    paisInput.name = 'pais';
-    paisInput.required = true;
+        // Recuperar a lista de empresas do localStorage
+        let empresas = JSON.parse(localStorage.getItem('empresas') || '[]');
+        
+        // Adicionar nova empresa à lista
+        empresas.push(empresa);
 
-    // Campo para Estado
-    const estadoLabel = document.createElement('label');
-    estadoLabel.textContent = 'Estado:';
-    const estadoInput = document.createElement('input');
-    estadoInput.type = 'text';
-    estadoInput.name = 'estado';
-    estadoInput.required = true;
+        // Salvar a lista atualizada no localStorage
+        localStorage.setItem('empresas', JSON.stringify(empresas));
+        
+        // Salva a empresa atual no localStorage
+        localStorage.setItem(`empresa-${empresa.id}`, JSON.stringify(empresa));
+        
+        // Opcional: armazena o ID da empresa atual para referência futura
+        localStorage.setItem('empresaAtual', empresa.id.toString());
 
-    // Campo para CEP
-    const cepLabel = document.createElement('label');
-    cepLabel.textContent = 'CEP:';
-    const cepInput = document.createElement('input');
-    cepInput.type = 'text';
-    cepInput.name = 'cep';
-    cepInput.required = true;
-
-    // Campo para Descrição
-    const cargoLabel = document.createElement('label');
-    cargoLabel.textContent = 'Cargo:';
-    const cargoInput = document.createElement('input');
-    cargoInput.name = 'cargo';
-    cargoInput.required = true;
-
-    // Campo para Competências
-    const competenciasLabel = document.createElement('label');
-    competenciasLabel.textContent = 'Competências:';
-    const competenciasInput = document.createElement('input');
-    competenciasInput.type = 'text';
-    competenciasInput.name = 'competencias';
-    competenciasInput.placeholder = 'Separe as competências por vírgula';
-    competenciasInput.required = true;
-
-    // Botão de Submissão
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Cadastrar';
-
-    // Adicionando os campos ao formulário
-    form.appendChild(nomeLabel);
-    form.appendChild(nomeInput);
-    form.appendChild(emailLabel);
-    form.appendChild(emailInput);
-    form.appendChild(cnpjLabel);
-    form.appendChild(cnpjInput);
-    form.appendChild(paisLabel);
-    form.appendChild(paisInput);
-    form.appendChild(estadoLabel);
-    form.appendChild(estadoInput);
-    form.appendChild(cepLabel);
-    form.appendChild(cepInput);
-    form.appendChild(cargoLabel);
-    form.appendChild(cargoInput);
-    form.appendChild(competenciasLabel);
-    form.appendChild(competenciasInput);
-    form.appendChild(submitButton);
-
-    return form;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const app = document.querySelector('body');
-    if (app) {
-        app.appendChild(createCompanyForm());
-    }
+        // Opcional: redireciona para outra página ou exibe uma mensagem
+        window.location.href = "perfilEmpresa.html"; // Redireciona para uma página de perfil do candidato
+    });
 });

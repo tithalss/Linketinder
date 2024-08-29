@@ -6,8 +6,8 @@ module.exports = {
     login: ['./src/components/login.ts'],
     formularioEmpresa: ['./src/components/formularioEmpresa.ts'],
     formularioCandidato: ['./src/components/formularioCandidato.ts'],
-    listaCandidatos: ['./src/components/listaCandidatos.ts'],
-    listaVagas: ['./src/components/listaVagas.ts'],
+    perfilEmpresa: ['./src/components/perfilEmpresa.ts'],
+    perfilCandidato: ['./src/components/perfilCandidato.ts'],
   },
   module: {
     rules: [

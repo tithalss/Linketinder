@@ -3,7 +3,7 @@ function createLoginForm(): HTMLElement {
     container.classList.add('login-container');
 
     const logo = document.createElement('img');
-    logo.src = '/Linketinder/frontend-ts/public/assets/Ltlogo.png'; // Substitua pelo caminho da sua imagem
+    logo.src = '/Linketinder/frontend-ts/public/assets/Ltlogo.png';
     logo.alt = 'Logo Linketinder';
     logo.classList.add('login-logo');
 
@@ -20,11 +20,11 @@ function createLoginForm(): HTMLElement {
 
     const registerAsCompanyButton = document.createElement('a');
     registerAsCompanyButton.textContent = 'Cadastrar como Empresa';
-    registerAsCompanyButton.href = 'formularioEmpresa.html'; // Substitua pelo caminho da sua página de cadastro de empresa
+    registerAsCompanyButton.href = 'formularioEmpresa.html';
 
     const registerAsCandidateButton = document.createElement('a');
     registerAsCandidateButton.textContent = 'Cadastrar como Candidato';
-    registerAsCandidateButton.href = 'formularioCandidato.html'; // Substitua pelo caminho da sua página de cadastro de candidato
+    registerAsCandidateButton.href = 'formularioCandidato.html';
 
     container.appendChild(logo);
     container.appendChild(usernameInput);

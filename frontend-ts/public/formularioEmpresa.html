@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de empresa</title>
+    <title>Cadastro de Empresa</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <form id="formulario-empresa" class="form-container" action="perfilEmpresa.html">
+        <label for="nome">Nome da Empresa:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="cnpj">CNPJ:</label>
+        <input type="text" id="cnpj" name="cnpj" required>
+
+        <label for="pais">País:</label>
+        <input type="text" id="pais" name="pais" required>
+
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" name="estado" required>
+
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" name="cep" required>
+
+        <label for="descricao">Descrição:</label>
+        <input type="textarea" id="descricao" name="descricao" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
     <script src="dist/formularioEmpresa.js"></script>
 </body>
 </html>

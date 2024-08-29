@@ -1,102 +1,46 @@
-function createCandidateForm(): HTMLElement {
-    const form = document.createElement('form');
-    form.classList.add('form-container');
-    form.action = "listaVagas.html";
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formulario-candidato") as HTMLFormElement;
 
-    // Campo para Nome Completo
-    const nomeLabel = document.createElement('label');
-    nomeLabel.textContent = 'Nome Completo:';
-    const nomeInput = document.createElement('input');
-    nomeInput.type = 'text';
-    nomeInput.name = 'nomeCompleto';
-    nomeInput.required = true;
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
 
-    // Campo para Email
-    const emailLabel = document.createElement('label');
-    emailLabel.textContent = 'Email:';
-    const emailInput = document.createElement('input');
-    emailInput.type = 'email';
-    emailInput.name = 'email';
-    emailInput.required = true;
+        const nome = (document.getElementById("nomeCompleto") as HTMLInputElement).value;
+        const email = (document.getElementById("email") as HTMLInputElement).value;
+        const cpf = (document.getElementById("cpf") as HTMLInputElement).value;
+        const idade = (document.getElementById("idade") as HTMLInputElement).value;
+        const estado = (document.getElementById("estado") as HTMLInputElement).value;
+        const cep = (document.getElementById("cep") as HTMLInputElement).value;
+        const cargo = (document.getElementById("cargo") as HTMLInputElement).value;
+        const competencias = (document.getElementById("competencias") as HTMLInputElement).value;
 
-    // Campo para CPF
-    const cpfLabel = document.createElement('label');
-    cpfLabel.textContent = 'CPF:';
-    const cpfInput = document.createElement('input');
-    cpfInput.type = 'text';
-    cpfInput.name = 'cpf';
-    cpfInput.required = true;
+        const candidato = {
+            id: Date.now(), // Gera um ID único baseado no timestamp
+            nome,
+            email,
+            cpf,
+            idade,
+            estado,
+            cep,
+            cargo,
+            competencias: competencias.split(",").map(comp => comp.trim())
+        };
 
-    // Campo para Idade
-    const idadeLabel = document.createElement('label');
-    idadeLabel.textContent = 'Idade:';
-    const idadeInput = document.createElement('input');
-    idadeInput.type = 'number';
-    idadeInput.name = 'idade';
-    idadeInput.required = true;
+        // Recuperar a lista de candidatos do localStorage
+        let candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+        
+        // Adicionar o novo candidato à lista
+        candidatos.push(candidato);
 
-    // Campo para Estado
-    const estadoLabel = document.createElement('label');
-    estadoLabel.textContent = 'Estado:';
-    const estadoInput = document.createElement('input');
-    estadoInput.type = 'text';
-    estadoInput.name = 'estado';
-    estadoInput.required = true;
+        // Salvar a lista atualizada no localStorage
+        localStorage.setItem('candidatos', JSON.stringify(candidatos));
+        
+        // Salva o candidato atual no localStorage
+        localStorage.setItem(`candidato-${candidato.id}`, JSON.stringify(candidato));
+        
+        // Opcional: armazena o ID do candidato atual para referência futura
+        localStorage.setItem('candidatoAtual', candidato.id.toString());
 
-    // Campo para CEP
-    const cepLabel = document.createElement('label');
-    cepLabel.textContent = 'CEP:';
-    const cepInput = document.createElement('input');
-    cepInput.type = 'text';
-    cepInput.name = 'cep';
-    cepInput.required = true;
-
-    // Campo para Descrição
-    const cargoLabel = document.createElement('label');
-    cargoLabel.textContent = 'Cargo:';
-    const cargoInput = document.createElement('input');
-    cargoInput.name = 'cargo';
-    cargoInput.required = true;
-
-    // Campo para Competências
-    const competenciasLabel = document.createElement('label');
-    competenciasLabel.textContent = 'Competências:';
-    const competenciasInput = document.createElement('input');
-    competenciasInput.type = 'text';
-    competenciasInput.name = 'competencias';
-    competenciasInput.placeholder = 'Separe as competências por vírgula';
-    competenciasInput.required = true;
-
-    // Botão de Submissão
-    const submitButton = document.createElement('button');
-    submitButton.type = "submit";
-    submitButton.textContent = 'Cadastrar';
-
-    // Adicionando os campos ao formulário
-    form.appendChild(nomeLabel);
-    form.appendChild(nomeInput);
-    form.appendChild(emailLabel);
-    form.appendChild(emailInput);
-    form.appendChild(cpfLabel);
-    form.appendChild(cpfInput);
-    form.appendChild(idadeLabel);
-    form.appendChild(idadeInput);
-    form.appendChild(estadoLabel);
-    form.appendChild(estadoInput);
-    form.appendChild(cepLabel);
-    form.appendChild(cepInput);
-    form.appendChild(cargoLabel);
-    form.appendChild(cargoInput);
-    form.appendChild(competenciasLabel);
-    form.appendChild(competenciasInput);
-    form.appendChild(submitButton);
-
-    return form;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const app = document.querySelector('body');
-    if (app) {
-        app.appendChild(createCandidateForm());
-    }
+        // Opcional: redireciona para outra página ou exibe uma mensagem
+        window.location.href = "perfilCandidato.html"; // Redireciona para uma página de perfil do candidato
+    });
 });
