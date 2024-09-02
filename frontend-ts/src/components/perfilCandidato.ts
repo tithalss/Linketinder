@@ -1,4 +1,3 @@
-// Define o tipo para representar um job
 interface Job {
     title: string;
     description: string;
@@ -45,12 +44,14 @@ function createJobCard(job: Job): HTMLElement {
     return jobCard;
 }
 
-// Função para renderizar os job cards na página
-function renderJobCards(jobs: Job[]): void {
+// Função que renderiza os job cards na página
+function renderJobCards(): void {
     const jobListingContainer = document.querySelector(".job-listing-container");
 
     if (jobListingContainer) {
-        jobListingContainer.innerHTML = ""; // Limpa os cards existentes
+        jobListingContainer.innerHTML = "";
+
+        const jobs = loadJobs();
 
         jobs.forEach(job => {
             const jobCard = createJobCard(job);
@@ -59,9 +60,7 @@ function renderJobCards(jobs: Job[]): void {
     }
 }
 
-// Função para carregar o perfil do usuário
-// perfilCandidato.ts
-
+// Função que carrega o perfil do usuário
 function loadCandidateProfile() {
     const userProfileDiv = document.getElementById('userProfile');
     
@@ -71,15 +70,13 @@ function loadCandidateProfile() {
     const candidatoAtualId = localStorage.getItem('candidatoAtual');
     
     if (candidatoAtualId) {
-        // Recuperar os dados do candidato atual do localStorage
         const candidatoData = localStorage.getItem(`candidato-${candidatoAtualId}`);
         
         if (candidatoData) {
             const candidato = JSON.parse(candidatoData);
 
-            // Preencher o conteúdo da aba de perfil
             userProfileDiv.innerHTML = `
-                <p><strong>Nome Completo:</strong> ${candidato.nome}</p>
+                <p>${candidato.nome}</p>
                 <p><strong>Email:</strong> ${candidato.email}</p>
                 <p><strong>CPF:</strong> ${candidato.cpf}</p>
                 <p><strong>Idade:</strong> ${candidato.idade}</p>
@@ -96,18 +93,9 @@ function loadCandidateProfile() {
     }
 }
 
-// Executa quando o DOM estiver carregado
 document.addEventListener("DOMContentLoaded", () => {
     
     loadCandidateProfile();
-
-    const jobsLoad = [
-        { title: "Desenvolvedor Full Stack", description: "Vaga para desenvolvedor com experiência em JavaScript, Node.js, e React." },
-        { title: "Analista de Dados", description: "Vaga para analista com habilidades em SQL, Python e Machine Learning." }
-    ];
     
-    localStorage.setItem("jobs", JSON.stringify(jobsLoad));
-    
-    const jobs = loadJobs();
-    renderJobCards(jobs);
+    renderJobCards();
 });

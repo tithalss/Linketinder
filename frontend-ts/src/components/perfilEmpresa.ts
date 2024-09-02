@@ -1,3 +1,26 @@
+import {
+    Chart,
+    BarController,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+
+Chart.register(
+    BarController,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend
+);
+
+
+
 interface Candidate {
     id: number;
     nome: string;
@@ -10,17 +33,16 @@ interface Candidate {
     competencias: string[];
 }
 
+// Função que monta o card de candidato, elementos + botão de like
 function createCandidateCard(candidato: Candidate): HTMLElement {
     const candidateCard = document.createElement("div");
     candidateCard.className = "candidate-card";
 
-    // Adiciona a foto genérica
     const photo = document.createElement("img");
-    photo.src = '/Linketinder/frontend-ts/public/assets/Anon.png'; // Substitua pelo caminho da foto genérica
-    photo.alt = 'Foto Genérica';
+    photo.src = '/Linketinder/frontend-ts/public/assets/Anon.png';
+    photo.alt = 'Foto Anom';
     photo.className = "candidate-photo";
     
-    // Adiciona o container das informações
     const infoContainer = document.createElement("div");
     infoContainer.className = "candidate-info";
 
@@ -32,7 +54,6 @@ function createCandidateCard(candidato: Candidate): HTMLElement {
     competenciesList.textContent = `Competências: ${candidato.competencias.join(', ')}`;
     competenciesList.className = "competencies";
 
-    // Botão de like
     const likeButton = document.createElement("button");
     likeButton.className = "like-button empty";
     likeButton.innerHTML = "♡";
@@ -49,7 +70,6 @@ function createCandidateCard(candidato: Candidate): HTMLElement {
         }
     });
 
-    // Monta o card
     infoContainer.appendChild(jobTitle);
     infoContainer.appendChild(competenciesList);
 
@@ -60,7 +80,7 @@ function createCandidateCard(candidato: Candidate): HTMLElement {
     return candidateCard;
 }
 
-// Função para carregar os candidatos do localStorage
+// Função para carregar os candidatos
 function loadCandidates(): Candidate[] {
     const candidates: Candidate[] = [];
     Object.keys(localStorage).forEach(key => {
@@ -79,7 +99,7 @@ function renderCandidateCards(candidates: Candidate[]): void {
     const candidatesContainer = document.querySelector(".candidates-container");
 
     if (candidatesContainer) {
-        candidatesContainer.innerHTML = ""; // Limpa os cards existentes
+        candidatesContainer.innerHTML = "";
 
         candidates.forEach(candidato => {
             const candidateCard = createCandidateCard(candidato);
@@ -103,9 +123,8 @@ function loadCompanyProfile() {
         if (empresaData) {
             const empresa = JSON.parse(empresaData);
 
-            // Preencher o conteúdo da aba de perfil
             userProfileDiv.innerHTML = `
-                <p><strong>Nome Completo:</strong> ${empresa.nome}</p>
+                <p>${empresa.nome}</p>
                 <p><strong>Email:</strong> ${empresa.email}</p>
                 <p><strong>CPF:</strong> ${empresa.cnpj}</p>
                 <p><strong>País:</strong> ${empresa.pais}</p>
@@ -121,10 +140,85 @@ function loadCompanyProfile() {
     }
 }
 
-// Executa quando o DOM estiver carregado
+// Função para contar competências dos candidatos
+function countCompetencies(candidates: Candidate[]): { [key: string]: number } {
+    const competenciesCount: { [key: string]: number } = {};
+
+    candidates.forEach(candidate => {
+        candidate.competencias.forEach(competencia => {
+            if (competenciesCount[competencia]) {
+                competenciesCount[competencia]++;
+            } else {
+                competenciesCount[competencia] = 1;
+            }
+        });
+    });
+
+    return competenciesCount;
+}
+
+// Função para criar o gráfico de barras
+function createCompetenciesChart(candidates: Candidate[]): void {
+    const competenciesCount = countCompetencies(candidates);
+    const ctx = document.getElementById('competenciesChart') as HTMLCanvasElement;
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(competenciesCount),
+            datasets: [{
+                label: 'Gráfico de competências',
+                data: Object.values(competenciesCount),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function registerJob() {
+    const jobTitleInput = document.getElementById("jobTitle") as HTMLInputElement;
+    const jobDescriptionInput = document.getElementById("jobDescription") as HTMLTextAreaElement;
+
+    const jobTitle = jobTitleInput.value.trim();
+    const jobDescription = jobDescriptionInput.value.trim();
+
+    if (jobTitle && jobDescription) {
+        const job = { title: jobTitle, description: jobDescription };
+
+        // Carrega as vagas
+        let jobs = JSON.parse(localStorage.getItem("jobs") || "[]");
+        jobs.push(job);
+
+        // Salva a lista atualizada no localStorage
+        localStorage.setItem("jobs", JSON.stringify(jobs));
+
+        alert("Vaga registrada com sucesso.")
+
+        jobTitleInput.value = "";
+        jobDescriptionInput.value = "";
+
+    } else {
+        alert("Por favor, preencha todos os campos para cadastrar a vaga.");
+    }
+}
+
+// Associa a função ao botão de cadastro
+document.getElementById("registerJobButton")?.addEventListener("click", registerJob);
+
 document.addEventListener('DOMContentLoaded', () => {
     loadCompanyProfile();
 
     const candidates = loadCandidates();
+
+    createCompetenciesChart(candidates);
     renderCandidateCards(candidates);
 });

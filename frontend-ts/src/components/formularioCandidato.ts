@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const competencias = (document.getElementById("competencias") as HTMLInputElement).value;
 
         const candidato = {
-            id: Date.now(), // Gera um ID único baseado no timestamp
+            id: Date.now(), // Gera ID baseado no timestamp
             nome,
             email,
             cpf,
@@ -25,10 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
             competencias: competencias.split(",").map(comp => comp.trim())
         };
 
-        // Recuperar a lista de candidatos do localStorage
+        // Recuperar lista de candidatos do localStorage
         let candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-        
-        // Adicionar o novo candidato à lista
         candidatos.push(candidato);
 
         // Salvar a lista atualizada no localStorage
@@ -37,10 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Salva o candidato atual no localStorage
         localStorage.setItem(`candidato-${candidato.id}`, JSON.stringify(candidato));
         
-        // Opcional: armazena o ID do candidato atual para referência futura
+        // Armazena o ID do candidato atual
         localStorage.setItem('candidatoAtual', candidato.id.toString());
-
-        // Opcional: redireciona para outra página ou exibe uma mensagem
-        window.location.href = "perfilCandidato.html"; // Redireciona para uma página de perfil do candidato
+        window.location.href = "perfilCandidato.html";
     });
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil Candidato</title>
+    <title>Perfil Empresa</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,6 +16,17 @@
 
     <div class="candidates-container"></div>
 
+    <!-- Div para cadastro de vagas -->
+    <div class="job-registration">
+        <h3>Cadastrar Nova Vaga</h3>
+        <input type="text" id="jobTitle" placeholder="Cargo" required>
+        <textarea id="jobDescription" placeholder="Descrição da Vaga" required></textarea>
+        <button id="registerJobButton">Cadastrar Vaga</button>
+    </div>
+
+    <canvas id="competenciesChart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="dist/perfilEmpresa.js"></script>
 </body>
 </html>
