@@ -12,6 +12,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const cep = (document.getElementById("cep") as HTMLInputElement).value;
         const descricao = (document.getElementById("descricao") as HTMLInputElement).value;
 
+        if (!/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]+$/.test(nome)) {
+            alert("ERRO: Nome inválido.");
+            return;
+        }        
+
+        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+            alert("ERRO: Email inválido.");
+            return;
+        }
+
+        if (!/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj)) {
+            alert("ERRO: CNPJ inválido.");
+            return;
+        }
+
+        if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(pais)) {
+            alert("ERRO: País inválido.");
+            return;
+        }
+        
+        if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(estado)) {
+            alert("ERRO: Estado inválido.");
+            return;
+        }        
+
+        if (!/^\d{5}-\d{3}$/.test(cep)) {
+            alert("ERRO: CEP inválido.");
+            return;
+        }
+
         const empresa = {
             id: Date.now(),
             nome,
