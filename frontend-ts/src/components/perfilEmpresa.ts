@@ -167,7 +167,7 @@ function createCompetenciesChart(candidates: Candidate[]): void {
         data: {
             labels: Object.keys(competenciesCount),
             datasets: [{
-                label: 'Gráfico de competências',
+                label: 'Número de candidatos por competência',
                 data: Object.values(competenciesCount),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
