@@ -1,3 +1,5 @@
+import org.example.Candidate
+
 class CandidatoTeste {
 
     static void main (String [] args) {

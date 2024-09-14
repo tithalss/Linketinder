@@ -1,3 +1,5 @@
+import org.example.Company
+
 class EmpresaTeste {
 
     static void main (String[] args) {
