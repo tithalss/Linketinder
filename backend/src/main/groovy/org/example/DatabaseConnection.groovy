@@ -7,7 +7,7 @@ import java.sql.SQLException
 class DatabaseConnection {
     private static final String URL = "jdbc:postgresql://localhost:5432/linketinder"
     private static final String USER = "postgres"
-    private static final String PASSWORD = "carrapato"
+    private static final String PASSWORD = "senha"
     private static Connection connection
 
     static {
