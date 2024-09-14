@@ -2,17 +2,13 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.List
-import java.util.Map
 
 class JobDAO {
     static void createJob(String cargo, String descricao, String local, int idEmpresa) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "INSERT INTO vagas (cargo, descricao, local, id_empresa) VALUES (?, ?, ?, ?)"
+        String sql = "INSERT INTO vagas (cargo, descricao, local, id_empresa) VALUES (?, ?, ?, ?)"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = conn.prepareStatement(sql)
             pstmt.setString(1, cargo)
             pstmt.setString(2, descricao)
             pstmt.setString(3, local)
@@ -28,10 +24,10 @@ class JobDAO {
     static List<Map<String, Object>> getJobs() {
         List<Map<String, Object>> jobs = new ArrayList<>()
         Connection conn = DatabaseConnection.getConnection()
-        String query = "SELECT * FROM vagas"
+        String sql = "SELECT * FROM vagas"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            ResultSet rs = pstmt.executeQuery()
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+            ResultSet rs = pstmt.executesql()
             while (rs.next()) {
                 Map<String, Object> job = new HashMap<>()
                 job.put("id", rs.getInt("id"))
@@ -52,11 +48,11 @@ class JobDAO {
     static Map<String, Object> getJobById(int id) {
         Map<String, Object> job = null
         Connection conn = DatabaseConnection.getConnection()
-        String query = "SELECT * FROM vagas WHERE id = ?"
+        String sql = "SELECT * FROM vagas WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = conn.prepareStatement(sql)
             pstmt.setInt(1, id)
-            ResultSet rs = pstmt.executeQuery()
+            ResultSet rs = pstmt.executesql()
             if (rs.next()) {
                 job = new HashMap<>()
                 job.put("id", rs.getInt("id"))
@@ -75,9 +71,9 @@ class JobDAO {
 
     static void updateJob(int id, String cargo, String descricao, String local, int idEmpresa) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "UPDATE vagas SET cargo = ?, descricao = ?, local = ?, id_empresa = ? WHERE id = ?"
+        String sql = "UPDATE vagas SET cargo = ?, descricao = ?, local = ?, id_empresa = ? WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = conn.prepareStatement(sql)
             pstmt.setString(1, cargo)
             pstmt.setString(2, descricao)
             pstmt.setString(3, local)
@@ -93,9 +89,9 @@ class JobDAO {
 
     static void deleteJob(int id) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "DELETE FROM vagas WHERE id = ?"
+        String sql = "DELETE FROM vagas WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = conn.prepareStatement(sql)
             pstmt.setInt(1, id)
             pstmt.executeUpdate()
         } catch (SQLException e) {

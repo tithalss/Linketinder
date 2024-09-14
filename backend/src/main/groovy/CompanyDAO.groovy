@@ -1,9 +1,7 @@
 import java.sql.Connection
-import java.sql.Date
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.time.LocalDate
 
 class CompanyDAO {
     static void createCompany(String nome, String cnpj, String email, String descricao, String pais, String cep, String senha) {
