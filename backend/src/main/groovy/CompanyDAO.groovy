@@ -1,14 +1,17 @@
 import java.sql.Connection
+import java.sql.Date
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.time.LocalDate
 
 class CompanyDAO {
     static void createCompany(String nome, String cnpj, String email, String descricao, String pais, String cep, String senha) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha) VALUES (?, ?, ?, ?, ?, ?, ?)"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            String sql = "INSERT INTO empresas (nome, cnpj, email, descricao, pais, cep, senha) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+
             pstmt.setString(1, nome)
             pstmt.setString(2, cnpj)
             pstmt.setString(3, email)
@@ -24,32 +27,70 @@ class CompanyDAO {
         }
     }
 
-    static List<Map<String, Object>> getCompanies() {
-        List<Map<String, Object>> companies = []
-        Connection conn = DatabaseConnection.getConnection()
-        String query = "SELECT * FROM empresas"
+    static Company getCompanyById(int id) {
+        Connection connection = DatabaseConnection.getConnection()
+        Company company = null
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            ResultSet rs = pstmt.executeQuery()
-            while (rs.next()) {
-                companies.add([
-                        id: rs.getInt("id"),
-                        nome: rs.getString("nome"),
-                        cnpj: rs.getString("cnpj"),
-                        email: rs.getString("email"),
-                        descricao: rs.getString("descricao"),
-                        pais: rs.getString("pais"),
-                        cep: rs.getString("cep"),
-                        senha: rs.getString("senha")
-                ])
+            String sql = "SELECT * FROM empresas WHERE id = ?"
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+            preparedStatement.setInt(1, id)
+            ResultSet resultSet = preparedStatement.executeQuery()
+
+            if (resultSet.next()) {
+                // Inicialize o objeto Company com os dados recuperados
+                company = new Company(
+                        resultSet.getString("nome"),
+                        resultSet.getString("email"),
+                        resultSet.getString("cnpj"),
+                        resultSet.getString("pais"),
+                        resultSet.getString("cep"),
+                        resultSet.getString("descricao"),
+                        resultSet.getString("senha")
+                )
             }
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             DatabaseConnection.closeConnection()
         }
-        return companies
+        return company
     }
 
-    // Métodos de update e delete podem ser adicionados aqui
+
+    static void updateCompany(int id, String nome, String cnpj, String email, String descricao, String pais, String cep, String senha) {
+        Connection connection = DatabaseConnection.getConnection()
+        try {
+            String sql = "UPDATE empresas SET nome = ?, cnpj = ?, email = ?, descricao = ?, pais = ?, cep = ?, senha = ? WHERE id = ?"
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+
+            preparedStatement.setInt(1, id)
+            preparedStatement.setString(2, nome)
+            preparedStatement.setString(3, cnpj)
+            preparedStatement.setString(4, email)
+            preparedStatement.setString(5, descricao)
+            preparedStatement.setString(6, pais)
+            preparedStatement.setString(7, cep)
+            preparedStatement.setString(8, senha)
+
+            preparedStatement.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            DatabaseConnection.closeConnection()
+        }
+    }
+
+    static void deleteCompany(int id) {
+        Connection connection = DatabaseConnection.getConnection()
+        try {
+            String sql = "DELETE FROM empresas WHERE id = ?"
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+            preparedStatement.setInt(1, id)
+            preparedStatement.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            DatabaseConnection.closeConnection()
+        }
+    }
 }

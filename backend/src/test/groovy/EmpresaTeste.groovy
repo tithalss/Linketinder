@@ -15,7 +15,7 @@ class EmpresaTeste {
         String descricao = "Serviços de tecnologia da informação"
         List<String> competencias = ["Java", "Groovy", "Postgre"]
 
-        Empresa empresa = new Empresa(nome, email, cnpj, pais, estado, cep, descricao, competencias)
+        Company empresa = new Company(nome, email, cnpj, pais, estado, cep, descricao, competencias)
 
         assert empresa.nome == nome : "Falha no teste. Nome não atribuído corretamente"
         assert empresa.email == email : "Falha no teste. Email não atribuído corretamente"

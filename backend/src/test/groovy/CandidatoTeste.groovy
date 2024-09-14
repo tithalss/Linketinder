@@ -15,7 +15,7 @@ class CandidatoTeste {
         String descricao = "Back-end Developer"
         List<String> competencias = ["Java", "Groovy", "Postgre"]
 
-        Candidato candidato = new Candidato(nomeCompleto, email, cpf, idade, estado, cep, descricao, competencias)
+        Candidate candidato = new Candidate(nomeCompleto, email, cpf, idade, estado, cep, descricao, competencias)
 
         assert candidato.nomeCompleto == nomeCompleto : "Falha no teste. Nome não atribuído corretamente"
         assert candidato.email == email : "Falha no teste. Email não atribuído corretamente"
