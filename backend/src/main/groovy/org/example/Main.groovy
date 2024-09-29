@@ -13,17 +13,24 @@ class Main {
         println "5 - Sair"
         println "Escolha uma opção: "
 
-        def input = scanner.nextLine()
+        String input = scanner.nextLine()
 
         switch (input) {
             case "1":
                 println "Email: "
-                def userEmail = scanner.nextLine()
+                String userEmail = scanner.nextLine()
                 println "Senha: "
-                def userPassword = scanner.nextLine()
+                String userPassword = scanner.nextLine()
                 def userId = AuthenticationService.authenticate(userEmail, userPassword)
                 if (userId != null) {
-                    println "Login efetuado."
+                    println "Login efetuado.\n"
+                    //testa like
+                    println "Informe o ID da vaga que deseja dar like: "
+                    int jobId = scanner.nextInt()
+                    if (jobId) {
+                        new LikeDAO().likeFromCandidate(userId, jobId)
+                        println "Vaga curtida com sucesso."
+                    }
                 } else {
                     println "Email ou senha inválidos. Tente novamente."
                 }
