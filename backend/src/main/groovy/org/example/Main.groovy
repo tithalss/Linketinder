@@ -1,5 +1,11 @@
 package org.example
 
+import org.example.ClassesDAO.CandidateDAO
+import org.example.ClassesDAO.CompanyDAO
+import org.example.ClassesDAO.JobDAO
+import org.example.ClassesDAO.LikeDAO
+import org.example.Services.AuthenticationService
+
 import java.time.LocalDate
 
 class Main {
@@ -36,7 +42,7 @@ class Main {
                 }
                 break
 
-                // CRUD do candidato
+            // CRUD do candidato
             case "2":
                 println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
                 def opcao = scanner.nextLine().toUpperCase()
@@ -119,7 +125,7 @@ class Main {
                 }
                 break
 
-                // CRUD da empresa
+            // CRUD da empresa
             case "3":
                 println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
                 def opcao = scanner.nextLine().toUpperCase()
@@ -194,7 +200,7 @@ class Main {
                 }
                 break
 
-                // CRUD da vaga
+            // CRUD da vaga
             case "4":
                 println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
                 def opcao = scanner.nextLine().toUpperCase()

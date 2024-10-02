@@ -1,4 +1,5 @@
-package org.example
+package org.example.ClassesDAO
+
 
 import java.sql.Connection
 import java.sql.PreparedStatement

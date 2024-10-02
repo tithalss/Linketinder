@@ -1,6 +1,6 @@
-import org.example.Company
+package org.example
 
-class EmpresaTeste {
+class CompanyTest {
 
     static void main (String[] args) {
         metodoDeTesteEmpresa()

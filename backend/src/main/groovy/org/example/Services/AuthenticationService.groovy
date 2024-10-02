@@ -1,4 +1,6 @@
-package org.example
+package org.example.Services
+
+import org.example.ClassesDAO.DatabaseConnection
 
 import java.sql.*
 
