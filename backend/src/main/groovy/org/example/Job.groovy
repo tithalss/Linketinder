@@ -1,0 +1,57 @@
+package org.example
+
+class Job {
+    private int id
+    private String cargo
+    private String descricao
+    private String local
+    private int id_empresa
+
+    Job(int id, String cargo, String descricao, int id_empresa) {
+        this.id = id
+        this.cargo = cargo
+        this.descricao = descricao
+        this.id_empresa = id_empresa
+    }
+
+    int getId() {
+        return id
+    }
+
+    void setId(int id) {
+        this.id = id
+    }
+
+    String getCargo() {
+        return cargo
+    }
+
+    void setCargo(String cargo) {
+        this.cargo = cargo
+    }
+
+    String getLocal() {
+        return local
+    }
+
+    void setLocal(String local) {
+        this.local = local
+    }
+
+    int getIdEmpresa() {
+        return id_empresa
+    }
+
+    void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa
+    }
+
+    @Override
+    String toString() {
+        return "ID: $id\n" +
+                "Cargo: $cargo\n" +
+                "Descrição da vaga: $descricao\n" +
+                "Local da vaga: $local\n" +
+                "ID da empresa: $id_empresa"
+    }
+}

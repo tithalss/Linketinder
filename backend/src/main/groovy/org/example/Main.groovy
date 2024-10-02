@@ -30,12 +30,9 @@ class Main {
                 def userId = AuthenticationService.authenticate(userEmail, userPassword)
                 if (userId != null) {
                     println "Login efetuado.\n"
-                    //testa like
-                    println "Informe o ID da vaga que deseja dar like: "
-                    int jobId = scanner.nextInt()
-                    if (jobId) {
-                        new LikeDAO().likeFromCandidate(userId, jobId)
-                        println "Vaga curtida com sucesso."
+                    List matchs = LikeDAO.getMatchsForCompany(userId)
+                    matchs.each {match ->
+                        println(match)
                     }
                 } else {
                     println "Email ou senha inválidos. Tente novamente."

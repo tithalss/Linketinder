@@ -1,14 +1,16 @@
 package org.example.ClassesDAO
 
-
 import java.sql.Connection
 import java.sql.PreparedStatement
+import java.sql.ResultSet
 import java.sql.SQLException
 
 class LikeDAO {
+
+    // Função para inserir curtida da empresa em um candidato
     static void likeFromCompany(int idEmpresa, int idCandidato) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "INSERT INTO like_empresa (id_empresa, id_candiato) VALUES (?, ?)"
+        String query = "INSERT INTO like_empresa (id_empresa, id_candidato) VALUES (?, ?)"
         try {
             PreparedStatement pstmt = conn.prepareStatement(query)
             pstmt.setInt(1, idEmpresa)
@@ -21,20 +23,7 @@ class LikeDAO {
         }
     }
 
-    static void unlikeFromCompany(int idLikeEmpresa) {
-        Connection conn = DatabaseConnection.getConnection()
-        String query = "DELETE FROM like_empresa WHERE id = ?"
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setInt(1, idLikeEmpresa)
-            pstmt.executeUpdate()
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
-        }
-    }
-
+    // Função para inserir curtida de um candidato em uma vaga
     static void likeFromCandidate(int idCandidato, int idVaga) {
         Connection conn = DatabaseConnection.getConnection()
         String query = "INSERT INTO like_candidato (id_candidato, id_vaga) VALUES (?, ?)"
@@ -50,17 +39,72 @@ class LikeDAO {
         }
     }
 
-    static void unlikeFromCandidate(int idLikeCandidato) {
+    // Função para verificar os matchs de uma empresa pelo seu ID
+    static List<String> getMatchsForCompany(int idEmpresa) {
         Connection conn = DatabaseConnection.getConnection()
-        String query = "DELETE FROM like_candidato WHERE id = ?"
+        String query = """
+            SELECT lc.id_vaga, c.nome AS candidato_nome, lc.id_candidato
+            FROM like_empresa le
+            JOIN like_candidato lc ON lc.id_candidato = le.id_candidato
+            JOIN vagas v ON lc.id_vaga = v.id
+            JOIN candidatos c ON lc.id_candidato = c.id
+            WHERE le.id_empresa = v.id_empresa
+              AND le.id_empresa = ?;
+        """
+
+        List<String> matchs = []
+
         try {
             PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setInt(1, idLikeCandidato)
-            pstmt.executeUpdate()
+            pstmt.setInt(1, idEmpresa)
+            ResultSet rs = pstmt.executeQuery()
+
+            while (rs.next()) {
+                int vagaId = rs.getInt("id_vaga")
+                String candidatoNome = rs.getString("candidato_nome")
+                matchs.add("Match encontrado! Vaga ID: ${vagaId}, Candidato: ${candidatoNome}")
+            }
+
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             DatabaseConnection.closeConnection()
         }
+
+        return matchs
+    }
+
+    // Função para verificar os matchs de um candidato pelo seu ID
+    static List<String> getMatchsForCandidate(int idCandidato) {
+        Connection conn = DatabaseConnection.getConnection()
+        String query = """
+            SELECT lc.id_vaga, e.nome AS empresa_nome, lc.id_candidato
+            FROM like_candidato lc
+            JOIN vagas v ON lc.id_vaga = v.id
+            JOIN empresas e ON v.id_empresa = e.id
+            JOIN like_empresa le ON le.id_empresa = v.id_empresa AND le.id_candidato = lc.id_candidato
+            WHERE lc.id_candidato = ?;
+        """
+
+        List<String> matchs = []
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query)
+            pstmt.setInt(1, idCandidato)
+            ResultSet rs = pstmt.executeQuery()
+
+            while (rs.next()) {
+                int vagaId = rs.getInt("id_vaga")
+                String empresaNome = rs.getString("empresa_nome")
+                matchs.add("Match encontrado! Vaga ID: ${vagaId}, Empresa: ${empresaNome}")
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            DatabaseConnection.closeConnection()
+        }
+
+        return matchs
     }
 }
