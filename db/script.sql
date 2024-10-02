@@ -84,3 +84,9 @@ VALUES ('Python'),('Java'),('Groovy'),('Ruby'),('Angular'),('MySql'),('Jenkins')
 
 INSERT INTO vagas (cargo, descricao, local, id_empresa)
 VALUES ('Angular Developer', 'Desenvolvimento e manutenção de aplicações baseadas em angular framework', 'Remoto', 1);
+
+INSERT INTO like_candidato(id_candidato, id_vaga)
+VALUES (1, 1);
+
+INSERT INTO like_empresa(id_empresa, id_candidato)
+VALUES (3,1);
