@@ -1,5 +1,6 @@
-package org.example;
+package org.example
 
+import org.example.Models.Candidate;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;

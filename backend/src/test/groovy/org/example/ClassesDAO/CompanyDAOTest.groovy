@@ -1,6 +1,6 @@
 package org.example.ClassesDAO
 
-import org.example.Company
+import org.example.Models.Company
 import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.*
 

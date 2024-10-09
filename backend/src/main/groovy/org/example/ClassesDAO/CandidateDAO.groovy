@@ -1,6 +1,6 @@
 package org.example.ClassesDAO
 
-import org.example.Candidate
+import org.example.Models.Candidate
 
 import java.sql.*
 import java.time.LocalDate

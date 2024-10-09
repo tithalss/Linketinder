@@ -1,6 +1,6 @@
 package org.example.ClassesDAO
 
-import org.example.Job
+import org.example.Models.Job
 
 import java.sql.Connection
 import java.sql.PreparedStatement

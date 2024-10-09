@@ -1,5 +1,6 @@
-package org.example;
+package org.example
 
+import org.example.Models.Job;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

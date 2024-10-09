@@ -1,6 +1,6 @@
 package org.example.ClassesDAO
 
-import org.example.Company
+import org.example.Models.Company
 
 import java.sql.Connection
 import java.sql.PreparedStatement

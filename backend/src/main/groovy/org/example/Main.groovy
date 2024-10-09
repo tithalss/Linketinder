@@ -1,6 +1,8 @@
 package org.example
 
 import org.example.ClassesDAO.*
+import org.example.Models.Candidate
+import org.example.Models.Company
 import org.example.Services.AuthenticationService
 
 import java.time.LocalDate

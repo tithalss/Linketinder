@@ -1,6 +1,6 @@
 package org.example.ClassesDAO
 
-import org.example.Candidate
+import org.example.Models.Candidate
 import org.junit.jupiter.api.*
 import java.time.LocalDate
 import static org.junit.jupiter.api.Assertions.*

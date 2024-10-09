@@ -1,4 +1,4 @@
-package org.example
+package org.example.Models
 
 class Company {
     private int id
