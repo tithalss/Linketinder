@@ -20,7 +20,6 @@ class Company {
         this.senha = senha
     }
 
-    // Getters e setters
     int getId() {
         return id
     }

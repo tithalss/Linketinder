@@ -1,82 +1,75 @@
 package org.example.Services
 
-import spock.lang.Specification
+import org.example.ClassesDAO.DatabaseConnection
+import org.junit.jupiter.api.*
 import java.sql.Connection
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.SQLException
 
-class AuthenticationServiceTest extends Specification {
+import static org.junit.jupiter.api.Assertions.*
 
-    Connection connectionMock = Mock(Connection)
-    PreparedStatement preparedStatementMock = Mock(PreparedStatement)
-    ResultSet resultSetMock = Mock(ResultSet)
+class AuthenticationServiceTest {
 
-    def "authenticate method should return userId if email and password match"() {
-        given:
-        def mockConnection = Mock(Connection)
-        def mockPreparedStatement = Mock(PreparedStatement)
-        def mockResultSet = Mock(ResultSet)
+    private Connection connection
+    private final String testEmail = "test@example.com"
+    private final String testPassword = "password123"
 
-        // Simula a resposta do banco de dados com um ID de usuário
-        mockConnection.prepareStatement(_) >> mockPreparedStatement
-        mockPreparedStatement.executeQuery() >> mockResultSet
-        mockResultSet.next() >> true
-        mockResultSet.getInt("id") >> 1
-
-        when:
-        def result = AuthenticationService.authenticate("test@example.com", "password")
-
-        then:
-        result == 1
+    @BeforeEach
+    void setUp() {
+        connection = DatabaseConnection.getConnection()
+        cleanUpTestUser(testEmail)
+        createTestUser(testEmail, testPassword)
     }
 
-    def "Deve retornar o ID do usuário ao autenticar com sucesso"() {
-        given: "Email e senha válidos"
-        String email = "test@example.com"
-        String senha = "password123"
-
-        // Configurando o comportamento do preparedStatement e resultSet
-        connectionMock.prepareStatement(_) >> preparedStatementMock
-        preparedStatementMock.executeQuery() >> resultSetMock
-        resultSetMock.next() >> true
-        resultSetMock.getInt("id") >> 1
-
-        when: "O método authenticate é chamado"
-        Integer userId = AuthenticationService.authenticate(email, senha)
-
-        then: "O ID do usuário deve ser retornado"
-        userId == 1
+    @AfterEach
+    void tearDown() {
+        Connection connection = DatabaseConnection.getConnection()
+        if (connection != null && !connection.isClosed()) {
+            DatabaseConnection.closeConnection()
+        } else {
+            System.out.println("Connection is closed or null.")
+        }
     }
 
-    def "Deve retornar null quando a autenticação falha"() {
-        given: "Email ou senha inválidos"
-        String email = "invalid@example.com"
-        String senha = "wrongpassword"
-
-        // Configurando o comportamento do preparedStatement e resultSet
-        connectionMock.prepareStatement(_) >> preparedStatementMock
-        preparedStatementMock.executeQuery() >> resultSetMock
-        resultSetMock.next() >> false
-
-        when: "O método authenticate é chamado"
-        Integer userId = AuthenticationService.authenticate(email, senha)
-
-        then: "Null deve ser retornado"
-        userId == null
+    @Test
+    void testAuthenticateSuccess() {
+        Integer userId = AuthenticationService.authenticate(testEmail, testPassword)
+        assertNotNull(userId, "O ID do usuário não deve ser nulo em caso de autenticação bem-sucedida.")
     }
 
-    def "Deve lidar com SQLException"() {
-        given: "Ocorre uma exceção SQL durante a autenticação"
-        String email = "test@example.com"
-        String senha = "password123"
+    @Test
+    void testAuthenticateFailure() {
+        Integer userId = AuthenticationService.authenticate(testEmail, "wrongpassword")
+        assertNull(userId, "O ID do usuário deve ser nulo em caso de falha na autenticação.")
+    }
 
-        connectionMock.prepareStatement(_) >> { throw new SQLException("Erro no banco") }
+    @Test
+    void testAuthenticateWithNonexistentUser() {
+        Integer userId = AuthenticationService.authenticate("nonexistent@example.com", testPassword)
+        assertNull(userId, "O ID do usuário deve ser nulo para um usuário inexistente.")
+    }
 
-        when: "O método authenticate é chamado"
-        Integer userId = AuthenticationService.authenticate(email, senha)
+    private void createTestUser(String email, String senha) {
+        String sql = "INSERT INTO candidatos (nome, data_nascimento, email, cpf, pais, cep, cargo, descricao, senha) " +
+                "VALUES ('Test User', '1990-01-01', ?, '12345678901', 'Brazil', '12345678', 'Developer', 'A test user.', ?)"
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+            preparedStatement.setString(1, email)
+            preparedStatement.setString(2, senha)
+            preparedStatement.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        }
+    }
 
-        then: "Null deve ser retornado devido à exceção"
-        userId == null
+    private void cleanUpTestUser(String email) {
+        String sql = "DELETE FROM candidatos WHERE email = ?"
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+            preparedStatement.setString(1, email)
+            preparedStatement.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        }
     }
 }

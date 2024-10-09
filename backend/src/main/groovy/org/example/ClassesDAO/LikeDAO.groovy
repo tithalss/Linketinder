@@ -6,8 +6,6 @@ import java.sql.ResultSet
 import java.sql.SQLException
 
 class LikeDAO {
-
-    // Função para inserir curtida da empresa em um candidato
     static void likeFromCompany(int idEmpresa, int idCandidato) {
         Connection conn = DatabaseConnection.getConnection()
         String query = "INSERT INTO like_empresa (id_empresa, id_candidato) VALUES (?, ?)"
@@ -70,7 +68,6 @@ class LikeDAO {
         } finally {
             DatabaseConnection.closeConnection()
         }
-
         return matchs
     }
 
@@ -104,7 +101,6 @@ class LikeDAO {
         } finally {
             DatabaseConnection.closeConnection()
         }
-
         return matchs
     }
 }

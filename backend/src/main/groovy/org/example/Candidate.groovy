@@ -27,6 +27,18 @@ class Candidate {
         this.senha = senha
     }
 
+    Candidate(String nomeCompleto, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
+        this.nomeCompleto = nomeCompleto
+        this.dataNascimento = dataNascimento
+        this.email = email
+        this.cpf = cpf
+        this.pais = pais
+        this.cep = cep
+        this.cargo = cargo
+        this.descricao = descricao
+        this.senha = senha
+    }
+
     int getId() {
         return id
     }

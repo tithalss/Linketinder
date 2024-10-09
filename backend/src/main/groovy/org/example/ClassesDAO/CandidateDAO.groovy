@@ -29,7 +29,6 @@ class CandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            println "Candidato cadastrado com sucesso."
             DatabaseConnection.closeConnection()
         }
     }
@@ -92,7 +91,6 @@ class CandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            println "Candidato atualizado com sucesso."
             DatabaseConnection.closeConnection()
         }
     }
@@ -107,7 +105,6 @@ class CandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            println "Candidato deletado com sucesso."
             DatabaseConnection.closeConnection()
         }
     }

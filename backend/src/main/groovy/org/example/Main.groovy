@@ -11,265 +11,323 @@ import java.time.LocalDate
 class Main {
     static void main(String[] args) {
         def scanner = new Scanner(System.in)
+        boolean exit = false
 
-        println "1 - Login"
-        println "2 - CRUD candidato"
-        println "3 - CRUD empresa"
-        println "4 - CRUD vaga"
-        println "5 - Sair"
-        println "Escolha uma opção: "
+        while (!exit) {
+            printMenu()
 
-        String input = scanner.nextLine()
+            String input = scanner.nextLine().trim()
 
-        switch (input) {
-            case "1":
-                println "Email: "
-                String userEmail = scanner.nextLine()
-                println "Senha: "
-                String userPassword = scanner.nextLine()
-                def userId = AuthenticationService.authenticate(userEmail, userPassword)
-                if (userId != null) {
-                    println "Login efetuado.\n"
-                    List matchs = LikeDAO.getMatchsForCompany(userId)
-                    matchs.each {match ->
-                        println(match)
-                    }
-                } else {
-                    println "Email ou senha inválidos. Tente novamente."
-                }
+            switch (input) {
+                case "1":
+                    handleLogin(scanner)
+                    break
+
+                case "2":
+                    handleCandidateCRUD(scanner)
+                    break
+
+                case "3":
+                    handleCompanyCRUD(scanner)
+                    break
+
+                case "4":
+                    handleJobCRUD(scanner)
+                    break
+
+                case "5":
+                    println "Saindo..."
+                    exit = true
+                    break
+
+                default:
+                    println "Opção inválida. Tente novamente."
+                    break
+            }
+        }
+    }
+
+    static void printMenu() {
+        println """
+        1 - Login
+        2 - CRUD Candidato
+        3 - CRUD Empresa
+        4 - CRUD Vaga
+        5 - Sair
+        Escolha uma opção: 
+        """
+    }
+
+    static void handleLogin(Scanner scanner) {
+        println "Email: "
+        String userEmail = scanner.nextLine().trim()
+        println "Senha: "
+        String userPassword = scanner.nextLine().trim()
+
+        def userId = AuthenticationService.authenticate(userEmail, userPassword)
+
+        if (userId != null) {
+            println "Login efetuado.\n"
+            List matchs = LikeDAO.getMatchsForCompany(userId)
+            matchs.each { println(it) }
+        } else {
+            println "Email ou senha inválidos. Tente novamente."
+        }
+    }
+
+    static void handleCandidateCRUD(Scanner scanner) {
+        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
+        String opcao = scanner.nextLine().trim().toUpperCase()
+
+        switch (opcao) {
+            case "CREATE":
+                createCandidate(scanner)
                 break
 
-            // CRUD do candidato
-            case "2":
-                println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
-                def opcao = scanner.nextLine().toUpperCase()
-
-                switch (opcao) {
-                    case "CREATE":
-                        println "Nome completo: "
-                        String nome = scanner.nextLine()
-                        println "Data de nascimento: "
-                        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
-                        println "email: "
-                        String email = scanner.nextLine()
-                        println "CPF: "
-                        String cpf = scanner.nextLine()
-                        println "País: "
-                        String pais = scanner.nextLine()
-                        println "CEP: "
-                        String cep = scanner.nextLine()
-                        println "Cargo desejado: "
-                        String cargo = scanner.nextLine()
-                        println "Descrição pessoal/profissional: "
-                        String descricao = scanner.nextLine()
-                        println "Senha: "
-                        String senha = scanner.nextLine()
-
-                        new CandidateDAO().createCandidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
-
-                        break
-
-                    case "READ":
-                        println "Informe o id do candidato: "
-                        Integer id_candidato = scanner.nextInt()
-                        scanner.nextLine()
-
-                        def candidato = new CandidateDAO().getCandidateById(id_candidato)
-
-                        println(candidato)
-
-                        break
-
-                    case "UPDATE":
-                        println "Informe o id do cadidato a ser atualizado: "
-                        Integer id_candidato = scanner.nextInt()
-                        scanner.nextLine()
-                        println "Novo nome completo: "
-                        String nome = scanner.nextLine()
-                        println "Nova data de nascimento: "
-                        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
-                        println "Novo email: "
-                        String email = scanner.nextLine()
-                        println "Novo CPF: "
-                        String cpf = scanner.nextLine()
-                        println "Novo país: "
-                        String pais = scanner.nextLine()
-                        println "Novo CEP: "
-                        String cep = scanner.nextLine()
-                        println "Novo cargo desejado: "
-                        String cargo = scanner.nextLine()
-                        println "Nova descrição pessoal/profissional: "
-                        String descricao = scanner.nextLine()
-                        println "Nova senha: "
-                        String senha = scanner.nextLine()
-
-                        new CandidateDAO().updateCandidate(id_candidato, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
-
-                        break
-
-                    case "DELETE":
-                        println "Informe o ID do candidato que será deletado: "
-                        Integer id_candidato = scanner.nextInt()
-                        scanner.nextLine()
-
-                        new CandidateDAO().deleteCandidate(id_candidato)
-
-                        break
-
-                    default:
-                        println "Opção inválida."
-                        break
-                }
+            case "READ":
+                readCandidate(scanner)
                 break
 
-            // CRUD da empresa
-            case "3":
-                println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
-                def opcao = scanner.nextLine().toUpperCase()
-
-                switch (opcao) {
-                    case "CREATE":
-                        println "Nome da empresa: "
-                        String nome = scanner.nextLine()
-                        println "CNPJ: "
-                        String cnpj = scanner.nextLine()
-                        println "email: "
-                        String email = scanner.nextLine()
-                        println "Descrição da empresa: "
-                        String descricao = scanner.nextLine()
-                        println "País: "
-                        String pais = scanner.nextLine()
-                        println "CEP: "
-                        String cep = scanner.nextLine()
-                        println "Senha: "
-                        String senha = scanner.nextLine()
-
-                        new CompanyDAO().createCompany(nome, cnpj, email, descricao, pais, cep, senha)
-
-                        break
-
-                    case "READ":
-                        println "Informe o ID da empresa: "
-                        Integer id_empresa = scanner.nextInt()
-                        scanner.nextLine()
-
-                        def empresa = new CompanyDAO().getCompanyById(id_empresa)
-
-                        println(empresa)
-
-                        break
-
-                    case "UPDATE":
-                        println "Informe o id do empresa a ser atualizada: "
-                        Integer id_empresa = scanner.nextInt()
-                        scanner.nextLine()
-                        println "Novo nome da empresa: "
-                        String nome = scanner.nextLine()
-                        println "Novo CNPJ: "
-                        String cnpj = scanner.nextLine()
-                        println "Novo email: "
-                        String email = scanner.nextLine()
-                        println "Nova descrição da empresa: "
-                        String descricao = scanner.nextLine()
-                        println "Novo país: "
-                        String pais = scanner.nextLine()
-                        println "Novo CEP: "
-                        String cep = scanner.nextLine()
-                        println "Nova senha: "
-                        String senha = scanner.nextLine()
-
-                        new CompanyDAO().updateCompany(id_empresa, nome, cnpj, email, descricao, pais, cep, senha)
-
-                        break
-
-                    case "DELETE":
-                        println "Informe o ID da empresa que será deletada: "
-                        Integer id_empresa = scanner.nextInt()
-                        scanner.nextLine()
-
-                        new CompanyDAO().deleteCompany(id_empresa)
-
-                        break
-
-                    default:
-                        println "Opção inválida."
-                        break
-                }
+            case "UPDATE":
+                updateCandidate(scanner)
                 break
 
-            // CRUD da vaga
-            case "4":
-                println "Digite qual operação deseja realizar Create, Read, Update ou Delete"
-                def opcao = scanner.nextLine().toUpperCase()
-
-                switch (opcao) {
-                    case "CREATE":
-                        println "Cargo: "
-                        String cargo = scanner.nextLine()
-                        println "Descrição da vaga: "
-                        String descricao = scanner.nextLine()
-                        println "Local de trabalho: "
-                        String local = scanner.nextLine()
-                        println "Identificação da empresa: "
-                        Integer id_empresa = scanner.nextInt()
-                        scanner.nextLine()
-
-                        new JobDAO().createJob(cargo, descricao, local, id_empresa)
-
-                        break
-
-                    case "READ":
-                        println "Informe o id da vaga: "
-                        Integer id_vaga = scanner.nextInt()
-                        scanner.nextLine()
-
-                        def vaga = new JobDAO().getJobById(id_vaga)
-
-                        println(vaga)
-
-                        break
-
-                    case "UPDATE":
-                        println "Informe o id da vaga a ser atualizada: "
-                        Integer id_vaga = scanner.nextInt()
-                        scanner.nextLine()
-                        println "Novo cargo: "
-                        String cargo = scanner.nextLine()
-                        println "Nova descrição da vaga: "
-                        String descricao = scanner.nextLine()
-                        println "Novo local de trabalho: "
-                        String local = scanner.nextLine()
-                        println "Identificação da empresa: "
-                        Integer id_empresa = scanner.nextInt()
-                        scanner.nextLine()
-
-                        new JobDAO().updateJob(id_vaga, cargo, descricao, local, id_empresa)
-
-                        break
-
-                    case "DELETE":
-                        println "Informe o ID da vaga que será deletada: "
-                        Integer id_vaga = scanner.nextInt()
-                        scanner.nextLine()
-
-                        new JobDAO().deleteJob(id_vaga)
-
-                        break
-
-                    default:
-                        println "Opção inválida."
-                        break
-                }
-                break
-
-            case "5":
-                println "Saindo..."
-                System.exit(0)
+            case "DELETE":
+                deleteCandidate(scanner)
                 break
 
             default:
                 println "Opção inválida."
                 break
         }
+    }
+
+    static void createCandidate(Scanner scanner) {
+        println "Nome completo: "
+        String nome = scanner.nextLine().trim()
+        println "Data de nascimento (AAAA-MM-DD): "
+        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine().trim())
+        println "Email: "
+        String email = scanner.nextLine().trim()
+        println "CPF: "
+        String cpf = scanner.nextLine().trim()
+        println "País: "
+        String pais = scanner.nextLine().trim()
+        println "CEP: "
+        String cep = scanner.nextLine().trim()
+        println "Cargo desejado: "
+        String cargo = scanner.nextLine().trim()
+        println "Descrição pessoal/profissional: "
+        String descricao = scanner.nextLine().trim()
+        println "Senha: "
+        String senha = scanner.nextLine().trim()
+
+        new CandidateDAO().createCandidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+    }
+
+    static void readCandidate(Scanner scanner) {
+        println "Informe o ID do candidato: "
+        int idCandidato = scanner.nextInt()
+        scanner.nextLine()
+
+        Candidate candidato = new CandidateDAO().getCandidateById(idCandidato)
+        println(candidato)
+    }
+
+    static void updateCandidate(Scanner scanner) {
+        println "Informe o ID do candidato a ser atualizado: "
+        int idCandidato = scanner.nextInt()
+        scanner.nextLine()
+
+        println "Novo nome completo: "
+        String nome = scanner.nextLine().trim()
+        println "Nova data de nascimento (AAAA-MM-DD): "
+        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine().trim())
+        println "Novo email: "
+        String email = scanner.nextLine().trim()
+        println "Novo CPF: "
+        String cpf = scanner.nextLine().trim()
+        println "Novo país: "
+        String pais = scanner.nextLine().trim()
+        println "Novo CEP: "
+        String cep = scanner.nextLine().trim()
+        println "Novo cargo desejado: "
+        String cargo = scanner.nextLine().trim()
+        println "Nova descrição pessoal/profissional: "
+        String descricao = scanner.nextLine().trim()
+        println "Nova senha: "
+        String senha = scanner.nextLine().trim()
+
+        new CandidateDAO().updateCandidate(idCandidato, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+    }
+
+    static void deleteCandidate(Scanner scanner) {
+        println "Informe o ID do candidato a ser deletado: "
+        int idCandidato = scanner.nextInt()
+        scanner.nextLine()
+
+        new CandidateDAO().deleteCandidate(idCandidato)
+    }
+
+    static void handleCompanyCRUD(Scanner scanner) {
+        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
+        String opcao = scanner.nextLine().trim().toUpperCase()
+
+        switch (opcao) {
+            case "CREATE":
+                createCompany(scanner)
+                break
+
+            case "READ":
+                readCompany(scanner)
+                break
+
+            case "UPDATE":
+                updateCompany(scanner)
+                break
+
+            case "DELETE":
+                deleteCompany(scanner)
+                break
+
+            default:
+                println "Opção inválida."
+                break
+        }
+    }
+
+    static void createCompany(Scanner scanner) {
+        println "Nome da empresa: "
+        String nome = scanner.nextLine().trim()
+        println "CNPJ: "
+        String cnpj = scanner.nextLine().trim()
+        println "Email: "
+        String email = scanner.nextLine().trim()
+        println "Descrição da empresa: "
+        String descricao = scanner.nextLine().trim()
+        println "País: "
+        String pais = scanner.nextLine().trim()
+        println "CEP: "
+        String cep = scanner.nextLine().trim()
+        println "Senha: "
+        String senha = scanner.nextLine().trim()
+
+        new CompanyDAO().createCompany(nome, cnpj, email, descricao, pais, cep, senha)
+    }
+
+    static void readCompany(Scanner scanner) {
+        println "Informe o ID da empresa: "
+        int idEmpresa = scanner.nextInt()
+        scanner.nextLine()
+
+        Company empresa = new CompanyDAO().getCompanyById(idEmpresa)
+        println(empresa)
+    }
+
+    static void updateCompany(Scanner scanner) {
+        println "Informe o ID da empresa a ser atualizada: "
+        int idEmpresa = scanner.nextInt()
+        scanner.nextLine()
+
+        println "Novo nome da empresa: "
+        String nome = scanner.nextLine().trim()
+        println "Novo CNPJ: "
+        String cnpj = scanner.nextLine().trim()
+        println "Novo email: "
+        String email = scanner.nextLine().trim()
+        println "Nova descrição da empresa: "
+        String descricao = scanner.nextLine().trim()
+        println "Novo país: "
+        String pais = scanner.nextLine().trim()
+        println "Novo CEP: "
+        String cep = scanner.nextLine().trim()
+        println "Nova senha: "
+        String senha = scanner.nextLine().trim()
+
+        new CompanyDAO().updateCompany(idEmpresa, nome, cnpj, email, descricao, pais, cep, senha)
+    }
+
+    static void deleteCompany(Scanner scanner) {
+        println "Informe o ID da empresa a ser deletada: "
+        int idEmpresa = scanner.nextInt()
+        scanner.nextLine()
+
+        new CompanyDAO().deleteCompany(idEmpresa)
+    }
+
+    static void handleJobCRUD(Scanner scanner) {
+        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
+        String opcao = scanner.nextLine().trim().toUpperCase()
+
+        switch (opcao) {
+            case "CREATE":
+                createJob(scanner)
+                break
+
+            case "READ":
+                readJob(scanner)
+                break
+
+            case "UPDATE":
+                updateJob(scanner)
+                break
+
+            case "DELETE":
+                deleteJob(scanner)
+                break
+
+            default:
+                println "Opção inválida."
+                break
+        }
+    }
+
+    static void createJob(Scanner scanner) {
+        println "Cargo: "
+        String cargo = scanner.nextLine().trim()
+        println "Descrição da vaga: "
+        String descricao = scanner.nextLine().trim()
+        println "Local de trabalho: "
+        String local = scanner.nextLine().trim()
+        println "ID da empresa: "
+        int idEmpresa = scanner.nextInt()
+        scanner.nextLine()
+
+        new JobDAO().createJob(cargo, descricao, local, idEmpresa)
+    }
+
+    static void readJob(Scanner scanner) {
+        println "Informe o ID da vaga: "
+        int idVaga = scanner.nextInt()
+        scanner.nextLine()
+
+        def vaga = new JobDAO().getJobById(idVaga)
+        println(vaga)
+    }
+
+    static void updateJob(Scanner scanner) {
+        println "Informe o ID da vaga a ser atualizada: "
+        int idVaga = scanner.nextInt()
+        scanner.nextLine()
+
+        println "Novo cargo: "
+        String cargo = scanner.nextLine().trim()
+        println "Nova descrição da vaga: "
+        String descricao = scanner.nextLine().trim()
+        println "Novo local de trabalho: "
+        String local = scanner.nextLine().trim()
+        println "ID da empresa: "
+        int idEmpresa = scanner.nextInt()
+        scanner.nextLine()
+
+        new JobDAO().updateJob(idVaga, cargo, descricao, local, idEmpresa)
+    }
+
+    static void deleteJob(Scanner scanner) {
+        println "Informe o ID da vaga a ser deletada: "
+        int idVaga = scanner.nextInt()
+        scanner.nextLine()
+
+        new JobDAO().deleteJob(idVaga)
     }
 }

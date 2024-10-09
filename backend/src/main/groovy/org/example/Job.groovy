@@ -30,6 +30,14 @@ class Job {
         this.cargo = cargo
     }
 
+    String getDescricao() {
+        return descricao
+    }
+
+    void setDescricao(String descricao) {
+        this.descricao = descricao
+    }
+
     String getLocal() {
         return local
     }

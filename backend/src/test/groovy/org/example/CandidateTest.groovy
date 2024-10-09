@@ -1,36 +1,83 @@
-package org.example
+package org.example;
+
+import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CandidateTest {
 
-    static void main (String [] args) {
-        metodoDeTesteCandidato()
-        println "Os testes passaram."
+    @Test
+    void testGettersAndSetters() {
+        Candidate candidate = new Candidate(
+                1,
+                "João Silva",
+                LocalDate.of(1990, 1, 1),
+                "joao.silva@example.com",
+                "123.456.789-00",
+                "Brasil",
+                "12345-678",
+                "Desenvolvedor",
+                "Desenvolvedor Full Stack",
+                "senha123"
+        );
+
+        assertEquals(1, candidate.getId());
+        assertEquals("João Silva", candidate.getNomeCompleto());
+        assertEquals(LocalDate.of(1990, 1, 1), candidate.getDataNascimento());
+        assertEquals("joao.silva@example.com", candidate.getEmail());
+        assertEquals("123.456.789-00", candidate.getCpf());
+        assertEquals("Brasil", candidate.getPais());
+        assertEquals("12345-678", candidate.getCep());
+        assertEquals("Desenvolvedor", candidate.getCargo());
+        assertEquals("Desenvolvedor Full Stack", candidate.getDescricao());
+        assertEquals("senha123", candidate.getSenha());
+
+        candidate.setNomeCompleto("Maria Souza");
+        candidate.setDataNascimento(LocalDate.of(1992, 2, 2));
+        candidate.setEmail("maria.souza@example.com");
+        candidate.setCpf("987.654.321-00");
+        candidate.setPais("Portugal");
+        candidate.setCep("87654-321");
+        candidate.setCargo("Gerente");
+        candidate.setDescricao("Gerente de Projetos");
+        candidate.setSenha("senha456");
+
+        assertEquals("Maria Souza", candidate.getNomeCompleto());
+        assertEquals(LocalDate.of(1992, 2, 2), candidate.getDataNascimento());
+        assertEquals("maria.souza@example.com", candidate.getEmail());
+        assertEquals("987.654.321-00", candidate.getCpf());
+        assertEquals("Portugal", candidate.getPais());
+        assertEquals("87654-321", candidate.getCep());
+        assertEquals("Gerente", candidate.getCargo());
+        assertEquals("Gerente de Projetos", candidate.getDescricao());
+        assertEquals("senha456", candidate.getSenha());
     }
 
-    static void metodoDeTesteCandidato() {
-        String nomeCompleto = "Thales Martins"
-        String email = "thales.martins@outlook.com"
-        String cpf = "123.456.789-10"
-        int idade = 24
-        String estado = "DF"
-        String cep = "71996-242"
-        String descricao = "Back-end Developer"
-        List<String> competencias = ["Java", "Groovy", "Postgre"]
+    @Test
+    void testToString() {
+        Candidate candidate = new Candidate(
+                1,
+                "João Silva",
+                LocalDate.of(1990, 1, 1),
+                "joao.silva@example.com",
+                "123.456.789-00",
+                "Brasil",
+                "12345-678",
+                "Desenvolvedor",
+                "Desenvolvedor Full Stack",
+                "senha123"
+        );
 
-        Candidate candidato = new Candidate(nomeCompleto, email, cpf, idade, estado, cep, descricao, competencias)
+        String expected = "ID: 1\n" +
+                "Nome Completo: João Silva\n" +
+                "Data de Nascimento: 1990-01-01\n" +
+                "Email: joao.silva@example.com\n" +
+                "CPF: 123.456.789-00\n" +
+                "País: Brasil\n" +
+                "CEP: 12345-678\n" +
+                "Cargo: Desenvolvedor\n" +
+                "Descrição: Desenvolvedor Full Stack";
 
-        assert candidato.nomeCompleto == nomeCompleto : "Falha no teste. Nome não atribuído corretamente"
-        assert candidato.email == email : "Falha no teste. Email não atribuído corretamente"
-        assert candidato.cpf == cpf : "Falha no teste. CPF não atribuído corretamente"
-        assert candidato.idade == idade : "Falha no teste. Idade não atribuída corretamente"
-        assert candidato.estado == estado : "Falha no teste. Estado não atribuído corretamente"
-        assert candidato.cep == cep : "Falha no teste. CEP não atribuído corretamente"
-        assert candidato.descricao == descricao : "Falha no teste. Descrição não atribuída corretamente"
-        assert candidato.competencias == competencias : "Falha no teste. Competências não atribuídas corretamente"
-
-        String resultado = candidato.toString()
-
-        String esperado = "Nome: Thales Martins, Email: thales.martins@outlook.com, CPF: 123.456.789-10, Idade: 24, Estado: DF, CEP: 71996-242, Descrição: Back-end Developer, Habilidades: Java, Groovy, Postgre"
-        assert resultado == esperado : "O método 'toString' não retornou o valor esperado"
+        assertEquals(expected, candidate.toString());
     }
 }
