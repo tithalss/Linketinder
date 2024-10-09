@@ -10,7 +10,8 @@ class Company {
     private String descricao
     private String senha
 
-    Company(String nome, String email, String cnpj, String pais, String cep, String descricao, String senha) {
+    Company(int id, String nome, String email, String cnpj, String pais, String cep, String descricao, String senha) {
+        this.id = id
         this.nome = nome
         this.email = email
         this.cnpj = cnpj

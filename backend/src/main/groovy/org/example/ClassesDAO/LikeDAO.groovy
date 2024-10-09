@@ -21,7 +21,6 @@ class LikeDAO {
         }
     }
 
-    // Função para inserir curtida de um candidato em uma vaga
     static void likeFromCandidate(int idCandidato, int idVaga) {
         Connection conn = DatabaseConnection.getConnection()
         String query = "INSERT INTO like_candidato (id_candidato, id_vaga) VALUES (?, ?)"

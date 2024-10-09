@@ -1,4 +1,4 @@
--- Modelo
+-- Modelo atualizado com DELETE ON CASCADE
 CREATE DATABASE linketinder;
 
 CREATE TABLE candidatos (
@@ -35,30 +35,30 @@ CREATE TABLE vagas (
     cargo VARCHAR(100),
     descricao TEXT,
     local VARCHAR(100),
-    id_empresa INT REFERENCES empresas(id)
+    id_empresa INT REFERENCES empresas(id) ON DELETE CASCADE
 );
 
 CREATE TABLE candidatos_competencias (
-    id_candidato INT REFERENCES candidatos(id),
+    id_candidato INT REFERENCES candidatos(id) ON DELETE CASCADE,
     id_competencia INT REFERENCES competencias(id),
     PRIMARY KEY (id_candidato, id_competencia)
 );
 
 CREATE TABLE vagas_competencias (
-    id_vaga INT REFERENCES vagas(id),
+    id_vaga INT REFERENCES vagas(id) ON DELETE CASCADE,
     id_competencia INT REFERENCES competencias(id),
     PRIMARY KEY (id_vaga, id_competencia)
 );
 
 CREATE TABLE like_empresa (
-    id_empresa INT REFERENCES empresas(id),
-    id_candidato INT REFERENCES candidatos(id),
+    id_empresa INT REFERENCES empresas(id) ON DELETE CASCADE,
+    id_candidato INT REFERENCES candidatos(id) ON DELETE CASCADE,
     PRIMARY KEY (id_empresa, id_candidato)
 );
 
 CREATE TABLE like_candidato (
-    id_candidato INT REFERENCES candidatos(id),
-    id_vaga INT REFERENCES vagas(id),
+    id_candidato INT REFERENCES candidatos(id) ON DELETE CASCADE,
+    id_vaga INT REFERENCES vagas(id) ON DELETE CASCADE,
     PRIMARY KEY (id_candidato, id_vaga)
 );
 

@@ -1,9 +1,6 @@
 package org.example
 
-import org.example.ClassesDAO.CandidateDAO
-import org.example.ClassesDAO.CompanyDAO
-import org.example.ClassesDAO.JobDAO
-import org.example.ClassesDAO.LikeDAO
+import org.example.ClassesDAO.*
 import org.example.Services.AuthenticationService
 
 import java.time.LocalDate

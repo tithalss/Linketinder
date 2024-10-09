@@ -9,26 +9,19 @@ class CandidateDAOTest {
 
     @BeforeEach
     void setUp() {
-        DatabaseConnection.getConnection().prepareStatement("DELETE FROM candidatos").executeUpdate()
+        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE candidatos RESTART IDENTITY CASCADE;").executeUpdate()
     }
 
     @Test
     void testCreateCandidate() {
-        // Configurar dados de teste
-        Candidate candidate = new Candidate("Joana Pereira", LocalDate.of(1992, 8, 14), "joan@gmail.com", "45678912355", "Espanha", "67890123", "Arquiteta", "Arquiteta de Software", "senha789")
+        CandidateDAO.createCandidate("Joana Pereira", LocalDate.of(1992, 8, 14), "joan@gmail.com", "45678912355", "Espanha", "67890123", "Arquiteta", "Arquiteta de Software", "senha789")
 
-        // Criar o candidato
-        Candidate createdCandidate = CandidateDAO.createCandidate(candidate);
+        Candidate createdCandidate = CandidateDAO.getCandidateById(1)
 
-        // Log para verificar o candidato criado
-        System.out.println("Created Candidate: " + createdCandidate);
-
-        // Verificar se o candidato não é nulo
-        assertNotNull(createdCandidate);
-        // Verifique se o ID foi gerado
-        assertNotNull(createdCandidate.getId());
+        assertNotNull(createdCandidate)
+        assertNotNull(createdCandidate.getId())
+        
     }
-
 
     @Test
     void testGetCandidateById() {

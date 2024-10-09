@@ -39,8 +39,8 @@ class CompanyDAO {
             ResultSet resultSet = preparedStatement.executeQuery()
 
             if (resultSet.next()) {
-                // Inicialize o objeto Company com os dados recuperados
                 company = new Company(
+                        resultSet.getInt("id"),
                         resultSet.getString("nome"),
                         resultSet.getString("email"),
                         resultSet.getString("cnpj"),
@@ -65,14 +65,14 @@ class CompanyDAO {
             String sql = "UPDATE empresas SET nome = ?, cnpj = ?, email = ?, descricao = ?, pais = ?, cep = ?, senha = ? WHERE id = ?"
             PreparedStatement preparedStatement = connection.prepareStatement(sql)
 
-            preparedStatement.setInt(1, id)
-            preparedStatement.setString(2, nome)
-            preparedStatement.setString(3, cnpj)
-            preparedStatement.setString(4, email)
-            preparedStatement.setString(5, descricao)
-            preparedStatement.setString(6, pais)
-            preparedStatement.setString(7, cep)
-            preparedStatement.setString(8, senha)
+            preparedStatement.setString(1, nome)
+            preparedStatement.setString(2, cnpj)
+            preparedStatement.setString(3, email)
+            preparedStatement.setString(4, descricao)
+            preparedStatement.setString(5, pais)
+            preparedStatement.setString(6, cep)
+            preparedStatement.setString(7, senha)
+            preparedStatement.setInt(8, id)
 
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
