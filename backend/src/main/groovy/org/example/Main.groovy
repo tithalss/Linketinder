@@ -3,8 +3,10 @@ package org.example
 import org.example.ClassesDAO.*
 import org.example.Models.Candidate
 import org.example.Models.Company
+import org.example.Models.Job
 import org.example.Services.AuthenticationService
 
+import java.sql.Connection
 import java.time.LocalDate
 
 class Main {
@@ -63,12 +65,14 @@ class Main {
         println "Senha: "
         String userPassword = scanner.nextLine().trim()
 
-        def userId = AuthenticationService.authenticate(userEmail, userPassword)
+        Connection connection = DatabaseConnection.getConnection()
+
+        def userId = new AuthenticationService(connection).authenticate(userEmail, userPassword)
 
         if (userId != null) {
             println "Login efetuado.\n"
-            List matchs = LikeDAO.getMatchsForCompany(userId)
-            matchs.each { println(it) }
+            Candidate candidate = new CandidateDAO(connection).getById(userId)
+            println(candidate)
         } else {
             println "Email ou senha inválidos. Tente novamente."
         }
@@ -121,7 +125,11 @@ class Main {
         println "Senha: "
         String senha = scanner.nextLine().trim()
 
-        new CandidateDAO().createCandidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+        Connection connection = DatabaseConnection.getConnection()
+
+        Candidate candidate = new Candidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+
+        new CandidateDAO(connection).create(candidate)
     }
 
     static void readCandidate(Scanner scanner) {
@@ -129,7 +137,9 @@ class Main {
         int idCandidato = scanner.nextInt()
         scanner.nextLine()
 
-        Candidate candidato = new CandidateDAO().getCandidateById(idCandidato)
+        Connection connection = DatabaseConnection.getConnection()
+
+        Candidate candidato = new CandidateDAO(connection).getById(idCandidato)
         println(candidato)
     }
 
@@ -157,7 +167,11 @@ class Main {
         println "Nova senha: "
         String senha = scanner.nextLine().trim()
 
-        new CandidateDAO().updateCandidate(idCandidato, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+        Connection connection = DatabaseConnection.getConnection()
+
+        Candidate candidate = new Candidate(idCandidato, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+
+        new CandidateDAO(connection).update(candidate)
     }
 
     static void deleteCandidate(Scanner scanner) {
@@ -165,7 +179,9 @@ class Main {
         int idCandidato = scanner.nextInt()
         scanner.nextLine()
 
-        new CandidateDAO().deleteCandidate(idCandidato)
+        Connection connection = DatabaseConnection.getConnection()
+
+        new CandidateDAO(connection).delete(idCandidato)
     }
 
     static void handleCompanyCRUD(Scanner scanner) {
@@ -211,7 +227,9 @@ class Main {
         println "Senha: "
         String senha = scanner.nextLine().trim()
 
-        new CompanyDAO().createCompany(nome, cnpj, email, descricao, pais, cep, senha)
+        Connection connection = DatabaseConnection.getConnection()
+
+        new CompanyDAO(connection).create(nome, cnpj, email, descricao, pais, cep, senha)
     }
 
     static void readCompany(Scanner scanner) {
@@ -243,7 +261,11 @@ class Main {
         println "Nova senha: "
         String senha = scanner.nextLine().trim()
 
-        new CompanyDAO().updateCompany(idEmpresa, nome, cnpj, email, descricao, pais, cep, senha)
+        Connection connection = DatabaseConnection.getConnection()
+
+        Company company = new Company(idEmpresa, nome, cnpj, email, descricao, pais, cep, senha)
+
+        new CompanyDAO(connection).updateCompany(company)
     }
 
     static void deleteCompany(Scanner scanner) {
@@ -251,7 +273,9 @@ class Main {
         int idEmpresa = scanner.nextInt()
         scanner.nextLine()
 
-        new CompanyDAO().deleteCompany(idEmpresa)
+        Connection connection = DatabaseConnection.getConnection()
+
+        new CompanyDAO(connection).deleteCompany(idEmpresa)
     }
 
     static void handleJobCRUD(Scanner scanner) {
@@ -292,7 +316,11 @@ class Main {
         int idEmpresa = scanner.nextInt()
         scanner.nextLine()
 
-        new JobDAO().createJob(cargo, descricao, local, idEmpresa)
+        Connection connection = DatabaseConnection.getConnection()
+
+        Job job = new Job(cargo, descricao, local, idEmpresa)
+
+        new JobDAO(connection).createJob(job)
     }
 
     static void readJob(Scanner scanner) {
@@ -300,7 +328,9 @@ class Main {
         int idVaga = scanner.nextInt()
         scanner.nextLine()
 
-        def vaga = new JobDAO().getJobById(idVaga)
+        Connection connection = DatabaseConnection.getConnection()
+
+        def vaga = new JobDAO(connection).getJobById(idVaga)
         println(vaga)
     }
 
@@ -319,7 +349,9 @@ class Main {
         int idEmpresa = scanner.nextInt()
         scanner.nextLine()
 
-        new JobDAO().updateJob(idVaga, cargo, descricao, local, idEmpresa)
+        Connection connection = DatabaseConnection.getConnection()
+
+        new JobDAO(connection).updateJob(idVaga, cargo, descricao, local, idEmpresa)
     }
 
     static void deleteJob(Scanner scanner) {
@@ -327,6 +359,8 @@ class Main {
         int idVaga = scanner.nextInt()
         scanner.nextLine()
 
-        new JobDAO().deleteJob(idVaga)
+        Connection connection = DatabaseConnection.getConnection()
+
+        new JobDAO(connection).deleteJob(idVaga)
     }
 }

@@ -13,9 +13,7 @@ class DatabaseConnection {
 
     static {
         try {
-            // Carrega os drivers do BD
             Class.forName("org.postgresql.Driver")
-            Class.forName("org.h2.Driver")
         } catch (ClassNotFoundException e) {
             e.printStackTrace()
         }
