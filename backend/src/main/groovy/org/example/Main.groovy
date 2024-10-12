@@ -237,7 +237,7 @@ class Main {
         int idEmpresa = scanner.nextInt()
         scanner.nextLine()
 
-        Company empresa = new CompanyDAO().getCompanyById(idEmpresa)
+        Company empresa = new CompanyDAO().getById(idEmpresa)
         println(empresa)
     }
 
@@ -265,7 +265,7 @@ class Main {
 
         Company company = new Company(idEmpresa, nome, cnpj, email, descricao, pais, cep, senha)
 
-        new CompanyDAO(connection).updateCompany(company)
+        new CompanyDAO(connection).update(company)
     }
 
     static void deleteCompany(Scanner scanner) {
@@ -275,7 +275,7 @@ class Main {
 
         Connection connection = DatabaseConnection.getConnection()
 
-        new CompanyDAO(connection).deleteCompany(idEmpresa)
+        new CompanyDAO(connection).delete(idEmpresa)
     }
 
     static void handleJobCRUD(Scanner scanner) {
@@ -320,7 +320,7 @@ class Main {
 
         Job job = new Job(cargo, descricao, local, idEmpresa)
 
-        new JobDAO(connection).createJob(job)
+        new JobDAO(connection).create(job)
     }
 
     static void readJob(Scanner scanner) {
@@ -330,7 +330,7 @@ class Main {
 
         Connection connection = DatabaseConnection.getConnection()
 
-        def vaga = new JobDAO(connection).getJobById(idVaga)
+        def vaga = new JobDAO(connection).getById(idVaga)
         println(vaga)
     }
 
@@ -351,7 +351,7 @@ class Main {
 
         Connection connection = DatabaseConnection.getConnection()
 
-        new JobDAO(connection).updateJob(idVaga, cargo, descricao, local, idEmpresa)
+        new JobDAO(connection).update(idVaga, cargo, descricao, local, idEmpresa)
     }
 
     static void deleteJob(Scanner scanner) {
@@ -361,6 +361,6 @@ class Main {
 
         Connection connection = DatabaseConnection.getConnection()
 
-        new JobDAO(connection).deleteJob(idVaga)
+        new JobDAO(connection).delete(idVaga)
     }
 }
