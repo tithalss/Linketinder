@@ -1,40 +1,45 @@
 package org.example.ClassesDAO
 
+import org.example.Interfaces.GenericDAO
 import org.example.Models.Candidate
-
 import java.sql.*
 import java.time.LocalDate
 
-class CandidateDAO {
-    static void createCandidate(String nome, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
-        Connection connection = DatabaseConnection.getConnection()
+class CandidateDAO implements GenericDAO<Candidate> {
+
+    private final Connection connection
+
+    CandidateDAO(Connection connection) {
+        this.connection = connection
+    }
+
+    @Override
+    void create(Candidate candidate) {
         try {
             String sql = "INSERT INTO candidatos (nome, data_nascimento, email, cpf, pais, cep, cargo, descricao, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
             PreparedStatement preparedStatement = connection.prepareStatement(sql)
 
             // Converte LocalDate para java.sql.Date
-            Date sqlDate = Date.valueOf(dataNascimento)
+            Date sqlDate = Date.valueOf(candidate.getDataNascimento())
 
-            preparedStatement.setString(1, nome)
+            preparedStatement.setString(1, candidate.getNomeCompleto())
             preparedStatement.setDate(2, sqlDate)
-            preparedStatement.setString(3, email)
-            preparedStatement.setString(4, cpf)
-            preparedStatement.setString(5, pais)
-            preparedStatement.setString(6, cep)
-            preparedStatement.setString(7, cargo)
-            preparedStatement.setString(8, descricao)
-            preparedStatement.setString(9, senha)
+            preparedStatement.setString(3, candidate.getEmail())
+            preparedStatement.setString(4, candidate.getCpf())
+            preparedStatement.setString(5, candidate.getPais())
+            preparedStatement.setString(6, candidate.getCep())
+            preparedStatement.setString(7, candidate.getCargo())
+            preparedStatement.setString(8, candidate.getDescricao())
+            preparedStatement.setString(9, candidate.getSenha())
 
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
-    static Candidate getCandidateById(int id) {
-        Connection connection = DatabaseConnection.getConnection()
+    @Override
+    Candidate getById(int id) {
         Candidate candidate = null
         try {
             String sql = "SELECT * FROM candidatos WHERE id = ?"
@@ -43,7 +48,6 @@ class CandidateDAO {
             ResultSet resultSet = preparedStatement.executeQuery()
 
             if (resultSet.next()) {
-                // Converte java.sql.Date para LocalDate
                 LocalDate dataNascimento = resultSet.getDate("data_nascimento").toLocalDate()
 
                 candidate = new Candidate(
@@ -56,47 +60,42 @@ class CandidateDAO {
                         resultSet.getString("cep"),
                         resultSet.getString("cargo"),
                         resultSet.getString("descricao"),
-                        resultSet.getString("senha"),
+                        resultSet.getString("senha")
                 )
             }
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return candidate
     }
 
-    static void updateCandidate(int id, String nome, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
-        Connection connection = DatabaseConnection.getConnection()
+    @Override
+    void update(Candidate candidate) {
         try {
             String sql = "UPDATE candidatos SET nome = ?, data_nascimento = ?, email = ?, cpf = ?, pais = ?, cep = ?, cargo = ?, descricao = ?, senha = ? WHERE id = ?"
             PreparedStatement preparedStatement = connection.prepareStatement(sql)
 
-            // Converte LocalDate para java.sql.Date
-            Date sqlDate = Date.valueOf(dataNascimento)
+            Date sqlDate = Date.valueOf(candidate.getDataNascimento())
 
-            preparedStatement.setString(1, nome)
+            preparedStatement.setString(1, candidate.getNomeCompleto())
             preparedStatement.setDate(2, sqlDate)
-            preparedStatement.setString(3, email)
-            preparedStatement.setString(4, cpf)
-            preparedStatement.setString(5, pais)
-            preparedStatement.setString(6, cep)
-            preparedStatement.setString(7, cargo)
-            preparedStatement.setString(8, descricao)
-            preparedStatement.setString(9, senha)
-            preparedStatement.setInt(10, id)
+            preparedStatement.setString(3, candidate.getEmail())
+            preparedStatement.setString(4, candidate.getCpf())
+            preparedStatement.setString(5, candidate.getPais())
+            preparedStatement.setString(6, candidate.getCep())
+            preparedStatement.setString(7, candidate.getCargo())
+            preparedStatement.setString(8, candidate.getDescricao())
+            preparedStatement.setString(9, candidate.getSenha())
+            preparedStatement.setInt(10, candidate.getId())
 
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
-    static void deleteCandidate(int id) {
-        Connection connection = DatabaseConnection.getConnection()
+    @Override
+    void delete(int id) {
         try {
             String sql = "DELETE FROM candidatos WHERE id = ?"
             PreparedStatement preparedStatement = connection.prepareStatement(sql)
@@ -104,8 +103,6 @@ class CandidateDAO {
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 }

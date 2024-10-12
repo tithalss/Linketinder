@@ -1,6 +1,6 @@
-package org.example
+package org.example.Models
 
-import org.example.Models.Company
+
 import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.*
 

@@ -1,12 +1,16 @@
 package org.example.Services
 
-import org.example.ClassesDAO.DatabaseConnection
-
 import java.sql.*
 
 class AuthenticationService {
-    static Integer authenticate(String email, String senha) {
-        Connection connection = DatabaseConnection.getConnection()
+
+    private final Connection connection
+
+    AuthenticationService(Connection connection) {
+        this.connection = connection
+    }
+
+    Integer authenticate(String email, String senha) {
         Integer userId = null
         try {
             String sql = "SELECT id FROM candidatos WHERE email = ? AND senha = ?"
@@ -20,10 +24,7 @@ class AuthenticationService {
             }
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return userId
     }
 }
-

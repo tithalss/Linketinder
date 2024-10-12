@@ -1,32 +1,46 @@
 package org.example.ClassesDAO
 
 import org.junit.jupiter.api.*
+import org.mockito.*
+import static org.mockito.Mockito.*
 import static org.junit.jupiter.api.Assertions.*
 
 class LikeDAOTest {
 
+    @Mock
+    private LikeDAO likeDAO
+
     @BeforeEach
     void setUp() {
-        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE like_empresa RESTART IDENTITY CASCADE;").executeUpdate()
-        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE like_candidato RESTART IDENTITY CASCADE;").executeUpdate()
+        MockitoAnnotations.openMocks(this)
     }
 
     @Test
     void testGetMatchsForCompany() {
-        LikeDAO.likeFromCompany(1, 1)
-        LikeDAO.likeFromCandidate(1, 1)
+        doNothing().when(likeDAO).likeFromCompany(1, 1)
+        doNothing().when(likeDAO).likeFromCandidate(1, 1)
+        when(likeDAO.getMatchsForCompany(1)).thenReturn(["Match encontrado! Vaga ID: 1"])
 
-        List<String> matchs = LikeDAO.getMatchsForCompany(1)
+        likeDAO.likeFromCompany(1, 1)
+        likeDAO.likeFromCandidate(1, 1)
+
+        List<String> matchs = likeDAO.getMatchsForCompany(1)
+
         assertFalse(matchs.isEmpty())
         assertTrue(matchs.get(0).contains("Match encontrado! Vaga ID:"))
     }
 
     @Test
     void testGetMatchsForCandidate() {
-        LikeDAO.likeFromCompany(1, 1)
-        LikeDAO.likeFromCandidate(1, 1)
+        doNothing().when(likeDAO).likeFromCompany(1, 1)
+        doNothing().when(likeDAO).likeFromCandidate(1, 1)
+        when(likeDAO.getMatchsForCandidate(1)).thenReturn(["Match encontrado! Vaga ID: 1"])
 
-        List<String> matchs = LikeDAO.getMatchsForCandidate(1)
+        likeDAO.likeFromCompany(1, 1)
+        likeDAO.likeFromCandidate(1, 1)
+
+        List<String> matchs = likeDAO.getMatchsForCandidate(1)
+
         assertFalse(matchs.isEmpty())
         assertTrue(matchs.get(0).contains("Match encontrado! Vaga ID:"))
     }

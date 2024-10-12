@@ -1,19 +1,23 @@
 package org.example.ClassesDAO
 
+import org.example.Interfaces.GenericDAO
+import org.example.Models.Competence
+import java.sql.*
 
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.SQLException
+class CompetenceDAO implements GenericDAO<Competence>{
 
-class CompetenceDAO {
-    static void createCompetence(String nome) {
-        Connection conn = DatabaseConnection.getConnection()
+    private final Connection connection
+
+    CompetenceDAO(Connection connection) {
+        this.connection = connection
+    }
+
+    void create(Competence competence) {
         String query = "INSERT INTO competencias (competencia) VALUES (?)"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setString(1, nome)
-            pstmt.executeUpdate()
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+            preparedStatement.setString(1, competence.getNome())
+            preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -21,40 +25,18 @@ class CompetenceDAO {
         }
     }
 
-    static List<Map<String, Object>> getCompetences() {
-        List<Map<String, Object>> competences = []
-        Connection conn = DatabaseConnection.getConnection()
-        String query = "SELECT * FROM competencias"
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            ResultSet rs = pstmt.executeQuery()
-            while (rs.next()) {
-                competences.add([
-                        id  : rs.getInt("id"),
-                        nome: rs.getString("competencia")
-                ])
-            }
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
-        }
-        return competences
-    }
-
-    static Map<String, Object> getCompetenceById(int id) {
-        Map<String, Object> competence = null
-        Connection conn = DatabaseConnection.getConnection()
+    Competence getById(int id) {
+        Competence competence = null
         String query = "SELECT * FROM competencias WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setInt(1, id)
-            ResultSet rs = pstmt.executeQuery()
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+            preparedStatement.setInt(1, id)
+            ResultSet rs = preparedStatement.executeQuery()
             if (rs.next()) {
-                competence = [
-                        id  : rs.getInt("id"),
-                        nome: rs.getString("competencia")
-                ]
+                competence = new Competence(
+                        rs.getInt("id"),
+                        rs.getString("competencia")
+                )
             }
         } catch (SQLException e) {
             e.printStackTrace()
@@ -64,14 +46,13 @@ class CompetenceDAO {
         return competence
     }
 
-    static void updateCompetence(int id, String nome) {
-        Connection conn = DatabaseConnection.getConnection()
+    void update(Competence competence) {
         String query = "UPDATE competencias SET competencia = ? WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setString(1, nome)
-            pstmt.setInt(2, id)
-            pstmt.executeUpdate()
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+            preparedStatement.setString(1, competence.getNome())
+            preparedStatement.setInt(2, competence.getId())
+            preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -79,13 +60,12 @@ class CompetenceDAO {
         }
     }
 
-    static void deleteCompetence(int id) {
-        Connection conn = DatabaseConnection.getConnection()
+    void delete(int id) {
         String query = "DELETE FROM competencias WHERE id = ?"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
-            pstmt.setInt(1, id)
-            pstmt.executeUpdate()
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+            preparedStatement.setInt(1, id)
+            preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {

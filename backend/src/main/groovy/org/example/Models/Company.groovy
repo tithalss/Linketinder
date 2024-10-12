@@ -21,6 +21,16 @@ class Company {
         this.senha = senha
     }
 
+    Company(String nome, String email, String cnpj, String pais, String cep, String descricao, String senha) {
+        this.nome = nome
+        this.email = email
+        this.cnpj = cnpj
+        this.pais = pais
+        this.cep = cep
+        this.descricao = descricao
+        this.senha = senha
+    }
+
     int getId() {
         return id
     }

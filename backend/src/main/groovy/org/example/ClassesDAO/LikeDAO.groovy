@@ -6,11 +6,17 @@ import java.sql.ResultSet
 import java.sql.SQLException
 
 class LikeDAO {
-    static void likeFromCompany(int idEmpresa, int idCandidato) {
-        Connection conn = DatabaseConnection.getConnection()
+
+    private final Connection connection
+
+    LikeDAO(Connection connection) {
+        this.connection = connection
+    }
+
+    void likeFromCompany(int idEmpresa, int idCandidato) {
         String query = "INSERT INTO like_empresa (id_empresa, id_candidato) VALUES (?, ?)"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = connection.prepareStatement(query)
             pstmt.setInt(1, idEmpresa)
             pstmt.setInt(2, idCandidato)
             pstmt.executeUpdate()
@@ -21,11 +27,10 @@ class LikeDAO {
         }
     }
 
-    static void likeFromCandidate(int idCandidato, int idVaga) {
-        Connection conn = DatabaseConnection.getConnection()
+    void likeFromCandidate(int idCandidato, int idVaga) {
         String query = "INSERT INTO like_candidato (id_candidato, id_vaga) VALUES (?, ?)"
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = connection.prepareStatement(query)
             pstmt.setInt(1, idCandidato)
             pstmt.setInt(2, idVaga)
             pstmt.executeUpdate()
@@ -36,9 +41,7 @@ class LikeDAO {
         }
     }
 
-    // Função para verificar os matchs de uma empresa pelo seu ID
-    static List<String> getMatchsForCompany(int idEmpresa) {
-        Connection conn = DatabaseConnection.getConnection()
+    List<String> getMatchsForCompany(int idEmpresa) {
         String query = """
             SELECT lc.id_vaga, c.nome AS candidato_nome, lc.id_candidato
             FROM like_empresa le
@@ -52,7 +55,7 @@ class LikeDAO {
         List<String> matchs = []
 
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = connection.prepareStatement(query)
             pstmt.setInt(1, idEmpresa)
             ResultSet rs = pstmt.executeQuery()
 
@@ -70,9 +73,7 @@ class LikeDAO {
         return matchs
     }
 
-    // Função para verificar os matchs de um candidato pelo seu ID
-    static List<String> getMatchsForCandidate(int idCandidato) {
-        Connection conn = DatabaseConnection.getConnection()
+    List<String> getMatchsForCandidate(int idCandidato) {
         String query = """
             SELECT lc.id_vaga, e.nome AS empresa_nome, lc.id_candidato
             FROM like_candidato lc
@@ -85,7 +86,7 @@ class LikeDAO {
         List<String> matchs = []
 
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query)
+            PreparedStatement pstmt = connection.prepareStatement(query)
             pstmt.setInt(1, idCandidato)
             ResultSet rs = pstmt.executeQuery()
 

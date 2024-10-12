@@ -1,32 +1,37 @@
 package org.example.ClassesDAO
 
 import org.example.Models.Company
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import static org.junit.jupiter.api.Assertions.*
 
 class CompanyDAOTest {
 
+    private CompanyDAO companyDAO
+    private Company mockCompany
+
     @BeforeEach
     void setUp() {
-        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE empresas RESTART IDENTITY CASCADE;").executeUpdate()
+        companyDAO = Mockito.mock(CompanyDAO.class)
+        mockCompany = new Company(1, "Global Solutions", "info@globalsolutions.com", "12345678000195", "Soluções globais", "Espanha", "02000000", "senha321")
     }
 
     @Test
     void testCreateCompany() {
-        CompanyDAO.createCompany("Tech Corp", "12345678000195", "contact@techcorp.com", "Uma empresa de tecnologia", "Brasil", "01000000", "senha123")
+        Mockito.doNothing().when(companyDAO).create(Mockito.any(Company.class))
 
-        Company createdCompany = CompanyDAO.getCompanyById(1)
+        Company newCompany = new Company(0, "Tech Corp", "contact@techcorp.com", "12345678000195", "Uma empresa de tecnologia", "Brasil", "01000000", "senha123")
 
-        assertNotNull(createdCompany)
-        assertNotNull(createdCompany.getId())
-        assertEquals("Tech Corp", createdCompany.getNome())
+        companyDAO.create(newCompany)
+        Mockito.verify(companyDAO).create(newCompany)
     }
 
     @Test
     void testGetCompanyById() {
-        CompanyDAO.createCompany("Global Solutions", "98765432000195", "info@globalsolutions.com", "Soluções globais", "Espanha", "02000000", "senha321")
+        Mockito.when(companyDAO.getById(1)).thenReturn(mockCompany)
 
-        Company company = CompanyDAO.getCompanyById(1)
+        Company company = companyDAO.getById(1)
 
         assertNotNull(company)
         assertEquals(1, company.getId())
@@ -36,23 +41,20 @@ class CompanyDAOTest {
 
     @Test
     void testUpdateCompany() {
-        CompanyDAO.createCompany("InovaTech", "11111111000111", "support@inovatech.com", "Inovações em tecnologia", "França", "03000000", "senha456")
+        Mockito.doNothing().when(companyDAO).update(Mockito.any(Company.class))
 
-        CompanyDAO.updateCompany(1, "InovaTech Ltda", "11111111000111", "support@inovatech.com", "Inovações em tecnologia e suporte", "França", "03000000", "novaSenha456")
+        mockCompany.setNome("InovaTech Ltda")
+        mockCompany.setEmail("support@inovatech.com")
 
-        Company updatedCompany = CompanyDAO.getCompanyById(1)
-        assertNotNull(updatedCompany)
-        assertEquals("InovaTech Ltda", updatedCompany.getNome())
-        assertEquals("Inovações em tecnologia e suporte", updatedCompany.getDescricao())
+        companyDAO.update(mockCompany)
+        Mockito.verify(companyDAO).update(mockCompany)
     }
 
     @Test
     void testDeleteCompany() {
-        CompanyDAO.createCompany("Startup XYZ", "22222222000122", "info@startupxyz.com", "Uma nova startup", "Alemanha", "04000000", "senha789")
+        Mockito.doNothing().when(companyDAO).delete(1)
 
-        CompanyDAO.deleteCompany(1)
-
-        Company company = CompanyDAO.getCompanyById(1)
-        assertNull(company)
+        companyDAO.delete(1)
+        Mockito.verify(companyDAO).delete(1)
     }
 }

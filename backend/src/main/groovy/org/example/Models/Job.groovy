@@ -7,10 +7,18 @@ class Job {
     private String local
     private int id_empresa
 
-    Job(int id, String cargo, String descricao, int id_empresa) {
+    Job(int id, String cargo, String descricao, String local, int id_empresa) {
         this.id = id
         this.cargo = cargo
         this.descricao = descricao
+        this.local = local
+        this.id_empresa = id_empresa
+    }
+
+    Job(String cargo, String descricao, String local, int id_empresa) {
+        this.cargo = cargo
+        this.descricao = descricao
+        this.local = local
         this.id_empresa = id_empresa
     }
 

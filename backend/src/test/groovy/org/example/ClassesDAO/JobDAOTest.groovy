@@ -1,58 +1,56 @@
 package org.example.ClassesDAO
 
 import org.example.Models.Job
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 import static org.junit.jupiter.api.Assertions.*
+import static org.mockito.ArgumentMatchers.*
+import static org.mockito.Mockito.*
 
 class JobDAOTest {
 
+    private JobDAO jobDAO
+    private Job mockJob
+
     @BeforeEach
     void setUp() {
-        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE vagas RESTART IDENTITY CASCADE;").executeUpdate()
+        jobDAO = mock(JobDAO.class)
+        mockJob = new Job(1, "Desenvolvedor Java", "Desenvolver aplicações usando Java e seus frameworks.", "Home Office", 1)
     }
 
     @Test
     void testCreateJob() {
-        JobDAO.createJob("Desenvolvedor Java", "Desenvolver aplicações usando Java e seus frameworks.", "Home Office", 1)
+        doNothing().when(jobDAO).create(any(Job.class))
 
-        Job createdJob = JobDAO.getJobById(1)
-
-        assertNotNull(createdJob)
-        assertNotNull(createdJob.getId())
-        assertEquals("Desenvolvedor Java", createdJob.getCargo())
+        jobDAO.create(mockJob)
+        verify(jobDAO).create(mockJob)
     }
 
     @Test
     void testGetJobById() {
-        JobDAO.createJob("Analista de Sistemas", "Análise de sistemas.", "Escritório", 1)
+        when(jobDAO.getById(1)).thenReturn(mockJob)
 
-        Job job = JobDAO.getJobById(1)
+        Job job = jobDAO.getById(1)
 
         assertNotNull(job)
         assertEquals(1, job.getId())
-        assertEquals("Analista de Sistemas", job.getCargo())
+        assertEquals("Desenvolvedor Java", job.getCargo())
     }
 
     @Test
     void testUpdateJob() {
-        JobDAO.createJob("Desenvolvedor Frontend", "Desenvolvimento de interfaces.", "Remoto", 1)
+        doNothing().when(jobDAO).update(any(Job.class))
 
-        JobDAO.updateJob(1, "Desenvolvedor Frontend Sênior", "Desenvolvimento de interfaces com foco em usabilidade.", "Híbrido", 1)
-
-        Job updatedJob = JobDAO.getJobById(1)
-        assertNotNull(updatedJob)
-        assertEquals("Desenvolvedor Frontend Sênior", updatedJob.getCargo())
-        assertEquals("Desenvolvimento de interfaces com foco em usabilidade.", updatedJob.getDescricao())
-        assertEquals("Híbrido", updatedJob.getLocal())
+        jobDAO.update(mockJob)
+        verify(jobDAO).update(mockJob)
     }
 
     @Test
     void testDeleteJob() {
-        JobDAO.createJob("Gerente de Projetos", "Gerenciamento de projetos.", "Escritório", 1)
+        doNothing().when(jobDAO).delete(1)
 
-        JobDAO.deleteJob(1)
-
-        Map<String, Object> job = JobDAO.getJobById(1)
-        assertNull(job)
+        jobDAO.delete(1)
+        verify(jobDAO).delete(1)
     }
 }

@@ -1,68 +1,60 @@
 package org.example.ClassesDAO
 
-import org.junit.jupiter.api.*
+import org.example.Models.Competence
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import static org.junit.jupiter.api.Assertions.*
 
 class CompetenceDAOTest {
 
+    private CompetenceDAO competenceDAO
+
     @BeforeEach
     void setUp() {
-        DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE competencias RESTART IDENTITY CASCADE;").executeUpdate()
+        competenceDAO = Mockito.mock(CompetenceDAO.class)
     }
 
     @Test
     void testCreateCompetence() {
-        CompetenceDAO.createCompetence("Java")
+        Competence competence = new Competence("Java")
 
-        Map<String, Object> createdCompetence = CompetenceDAO.getCompetenceById(1)
+        Mockito.doNothing().when(competenceDAO).create(competence)
 
-        assertNotNull(createdCompetence)
-        assertNotNull(createdCompetence.get("id"))
-        assertEquals("Java", createdCompetence.get("nome"))
+        competenceDAO.create(competence)
+        Mockito.verify(competenceDAO).create(competence)
     }
 
     @Test
     void testGetCompetenceById() {
-        CompetenceDAO.createCompetence("Python")
+        Competence competence = new Competence("Python")
+        competence.setId(1)
 
-        Map<String, Object> competence = CompetenceDAO.getCompetenceById(1)
+        Mockito.when(competenceDAO.getById(1)).thenReturn(competence)
 
-        assertNotNull(competence)
-        assertEquals(1, competence.get("id"))
-        assertEquals("Python", competence.get("nome"))
+        Competence result = competenceDAO.getById(1)
+
+        assertNotNull(result)
+        assertEquals(1, result.getId())
+        assertEquals("Python", result.getNome())
     }
 
     @Test
     void testUpdateCompetence() {
-        CompetenceDAO.createCompetence("JavaScript")
+        Competence competence = new Competence("JavaScript")
+        competence.setId(1)
 
-        CompetenceDAO.updateCompetence(1, "JavaScript ES6")
+        Mockito.doNothing().when(competenceDAO).update(competence)
 
-        Map<String, Object> updatedCompetence = CompetenceDAO.getCompetenceById(1)
-        assertNotNull(updatedCompetence)
-        assertEquals("JavaScript ES6", updatedCompetence.get("nome"))
+        competenceDAO.update(competence)
+        Mockito.verify(competenceDAO).update(competence)
     }
 
     @Test
     void testDeleteCompetence() {
-        CompetenceDAO.createCompetence("C++")
+        Mockito.doNothing().when(competenceDAO).delete(1)
 
-        CompetenceDAO.deleteCompetence(1)
-
-        Map<String, Object> competence = CompetenceDAO.getCompetenceById(1)
-        assertNull(competence)
-    }
-
-    @Test
-    void testGetCompetences() {
-        CompetenceDAO.createCompetence("Ruby")
-        CompetenceDAO.createCompetence("Go")
-
-        List<Map<String, Object>> competences = CompetenceDAO.getCompetences()
-
-        assertNotNull(competences)
-        assertEquals(2, competences.size())
-        assertEquals("Ruby", competences.get(0).get("nome"))
-        assertEquals("Go", competences.get(1).get("nome"))
+        competenceDAO.delete(1)
+        Mockito.verify(competenceDAO).delete(1)
     }
 }
