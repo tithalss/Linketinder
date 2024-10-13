@@ -1,104 +1,77 @@
 package org.example.Services
 
-import org.example.ClassesDAO.DatabaseConnection
-import org.junit.jupiter.api.*
-import java.sql.*
 
-import static org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.mockito.ArgumentMatchers.anyString
+import static org.mockito.Mockito.*
 
 class AuthenticationServiceTest {
 
-    private Connection connection
+    private Connection mockConnection
     private AuthenticationService authenticationService
-    private final String testEmail = "test@example.com"
-    private final String testPassword = "password123"
+    private PreparedStatement mockPreparedStatement
+    private ResultSet mockResultSet
 
-    @BeforeAll
-    static void setupAll() {
-        DatabaseConnection.setTestDatabase()
-    }
+    private final String testEmail = "test@example.com"
+    private final String testPassword = "senha"
 
     @BeforeEach
     void setUp() {
-        connection = DatabaseConnection.getConnection()
-        createTable()
-        cleanUpTestUser(testEmail)
-        createTestUser(testEmail, testPassword)
-        authenticationService = new AuthenticationService(connection)
-    }
-
-    @AfterEach
-    void tearDown() {
-        cleanUpTestUser(testEmail)
-        if (connection != null && !connection.isClosed()) {
-            DatabaseConnection.closeConnection()
-        } else {
-            System.out.println("Connection is closed or null.")
-        }
+        mockConnection = mock(Connection.class)
+        mockPreparedStatement = mock(PreparedStatement.class)
+        mockResultSet = mock(ResultSet.class)
+        authenticationService = new AuthenticationService(mockConnection)
     }
 
     @Test
-    void testAuthenticateSuccess() {
+    void testAuthenticateSuccess() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement)
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet)
+        when(mockResultSet.next()).thenReturn(true)
+        when(mockResultSet.getInt("id")).thenReturn(1)
+
         Integer userId = authenticationService.authenticate(testEmail, testPassword)
         assertNotNull(userId, "O ID do usuário não deve ser nulo em caso de autenticação bem-sucedida.")
+
+        verify(mockPreparedStatement).setString(1, testEmail)
+        verify(mockPreparedStatement).setString(2, testPassword)
+        verify(mockPreparedStatement).executeQuery()
     }
 
     @Test
-    void testAuthenticateFailure() {
-        Integer userId = authenticationService.authenticate(testEmail, "wrongpassword")
+    void testAuthenticateFailure() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement)
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet)
+        when(mockResultSet.next()).thenReturn(false)
+
+        Integer userId = authenticationService.authenticate(testEmail, "senhaerrada")
         assertNull(userId, "O ID do usuário deve ser nulo em caso de falha na autenticação.")
+
+        verify(mockPreparedStatement).setString(1, testEmail)
+        verify(mockPreparedStatement).setString(2, "senhaerrada")
+        verify(mockPreparedStatement).executeQuery()
     }
 
     @Test
-    void testAuthenticateWithNonexistentUser() {
-        Integer userId = authenticationService.authenticate("nonexistent@example.com", testPassword)
+    void testAuthenticateWithNonexistentUser() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement)
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet)
+        when(mockResultSet.next()).thenReturn(false)
+
+        Integer userId = authenticationService.authenticate("naoexiste@example.com", testPassword)
         assertNull(userId, "O ID do usuário deve ser nulo para um usuário inexistente.")
-    }
 
-    private void createTable() {
-        String sql = """
-        CREATE TABLE IF NOT EXISTS candidatos (
-            id SERIAL PRIMARY KEY,
-            nome VARCHAR(100),
-            data_nascimento DATE,
-            email VARCHAR(100) UNIQUE,
-            cpf VARCHAR(11),
-            pais VARCHAR(50),
-            cep VARCHAR(10),
-            cargo VARCHAR(50),
-            descricao TEXT,
-            senha VARCHAR(100)
-        )
-    """
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)
-            preparedStatement.executeUpdate()
-        } catch (SQLException e) {
-            e.printStackTrace()
-        }
-    }
-
-    private void createTestUser(String email, String senha) {
-        String sql = "INSERT INTO candidatos (nome, data_nascimento, email, cpf, pais, cep, cargo, descricao, senha) " +
-                "VALUES ('Test User', '1990-01-01', ?, '12345678901', 'Brazil', '12345678', 'Developer', 'A test user.', ?)"
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)
-            preparedStatement.setString(1, email)
-            preparedStatement.setString(2, senha)
-            preparedStatement.executeUpdate()
-        } catch (SQLException e) {
-            e.printStackTrace()
-        }
-    }
-
-    private void cleanUpTestUser(String email) {
-        String sql = "DELETE FROM candidatos WHERE email = ?"
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)
-            preparedStatement.setString(1, email)
-            preparedStatement.executeUpdate()
-        } catch (SQLException e) {
-            e.printStackTrace()
-        }
+        verify(mockPreparedStatement).setString(1, "naoexiste@example.com")
+        verify(mockPreparedStatement).setString(2, testPassword)
+        verify(mockPreparedStatement).executeQuery()
     }
 }

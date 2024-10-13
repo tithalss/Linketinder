@@ -8,21 +8,10 @@ class DatabaseConnection {
     private static final String URL = "jdbc:postgresql://localhost:5432/linketinder"
     private static final String USER = "postgres"
     private static final String PASSWORD = "senha"
-    private static final String H2_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+
     private static Connection connection
 
-    static {
-        try {
-            Class.forName("org.postgresql.Driver")
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace()
-        }
-    }
-
-    static void setTestDatabase() {
-        connection = null
-        connection = DriverManager.getConnection(H2_URL, "sa", "")
-    }
+    private DatabaseConnection() {}
 
     static Connection getConnection() {
         if (connection == null || connection.isClosed()) {
@@ -33,6 +22,17 @@ class DatabaseConnection {
             }
         }
         return connection
+    }
+
+    // Método para criar diferentes conexões, implementando o padrão Factory
+    static Connection createConnection(String url, String user, String password) {
+        Connection newConnection = null
+        try {
+            newConnection = DriverManager.getConnection(url, user, password)
+        } catch (SQLException e) {
+            e.printStackTrace()
+        }
+        return newConnection
     }
 
     static void closeConnection() {
