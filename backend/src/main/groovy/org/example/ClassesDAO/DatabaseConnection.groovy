@@ -24,7 +24,6 @@ class DatabaseConnection {
         return connection
     }
 
-    // Método para criar diferentes conexões, implementando o padrão Factory
     static Connection createConnection(String url, String user, String password) {
         Connection newConnection = null
         try {
