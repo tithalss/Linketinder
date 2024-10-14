@@ -24,7 +24,7 @@ class DatabaseConnection {
         return connection
     }
 
-    static Connection createConnection(String url, String user, String password) {
+    static Connection connectionFactory(String url, String user, String password) {
         Connection newConnection = null
         try {
             newConnection = DriverManager.getConnection(url, user, password)
