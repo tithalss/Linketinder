@@ -26,8 +26,6 @@ class JobDAO implements GenericDAO<Job>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -50,8 +48,6 @@ class JobDAO implements GenericDAO<Job>{
             }
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return job
     }
@@ -68,8 +64,6 @@ class JobDAO implements GenericDAO<Job>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -81,8 +75,6 @@ class JobDAO implements GenericDAO<Job>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 }

@@ -4,14 +4,14 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 
-class DatabaseConnection {
+class ConnectionFactory {
     private static final String URL = "jdbc:postgresql://localhost:5432/linketinder"
     private static final String USER = "postgres"
     private static final String PASSWORD = "senha"
 
     private static Connection connection
 
-    private DatabaseConnection() {}
+    private ConnectionFactory() {}
 
     static Connection getConnection() {
         if (connection == null || connection.isClosed()) {

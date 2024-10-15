@@ -20,8 +20,6 @@ class CompetenceDAO implements GenericDAO<Competence>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -40,8 +38,6 @@ class CompetenceDAO implements GenericDAO<Competence>{
             }
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return competence
     }
@@ -55,8 +51,6 @@ class CompetenceDAO implements GenericDAO<Competence>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -68,8 +62,6 @@ class CompetenceDAO implements GenericDAO<Competence>{
             preparedStatement.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 }

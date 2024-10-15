@@ -4,18 +4,18 @@ import org.junit.jupiter.api.*
 
 import java.sql.Connection
 
-class DatabaseConnectionTest {
+class ConnectionFactoryTest {
 
     private Connection connection
 
     @BeforeEach
     void setUp() {
-        connection = DatabaseConnection.getConnection()
+        connection = ConnectionFactory.getConnection()
     }
 
     @AfterEach
     void tearDown() {
-        DatabaseConnection.closeConnection()
+        ConnectionFactory.closeConnection()
     }
 
     @Test
@@ -30,19 +30,19 @@ class DatabaseConnectionTest {
 
     @Test
     void testCloseConnection() {
-        DatabaseConnection.closeConnection()
+        ConnectionFactory.closeConnection()
         Assertions.assertTrue(connection.isClosed(), "A conexão deve estar fechada após ser fechada.")
     }
 
     @Test
     void testMultipleConnections() {
-        DatabaseConnection.closeConnection()
+        ConnectionFactory.closeConnection()
 
-        Connection newConnection = DatabaseConnection.getConnection()
+        Connection newConnection = ConnectionFactory.getConnection()
         Assertions.assertNotEquals(connection, newConnection, "As conexões devem ser diferentes após a primeira conexão ser fechada.")
 
         Assertions.assertFalse(newConnection.isClosed(), "A nova conexão deve estar aberta.")
 
-        DatabaseConnection.closeConnection()
+        ConnectionFactory.closeConnection()
     }
 }

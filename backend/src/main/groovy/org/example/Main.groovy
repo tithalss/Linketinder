@@ -1,16 +1,15 @@
 package org.example
 
 import org.example.ClassesDAO.*
-import org.example.Models.Candidate
-import org.example.Models.Company
-import org.example.Models.Job
+import org.example.Controllers.*
 import org.example.Services.AuthenticationService
+import org.example.Views.*
 
 import java.sql.Connection
-import java.time.LocalDate
 
 class Main {
     static void main(String[] args) {
+        Connection connection = ConnectionFactory.getConnection()
         def scanner = new Scanner(System.in)
         boolean exit = false
 
@@ -21,24 +20,86 @@ class Main {
 
             switch (input) {
                 case "1":
-                    handleLogin(scanner)
+                    CandidateDAO candidateDAO = new CandidateDAO(connection)
+
+                    AuthenticationService authService = new AuthenticationService(connection)
+
+                    LoginController loginController = new LoginController(authService, candidateDAO)
+
+                    LoginView loginView = new LoginView(loginController)
+
+                    println "Digite seu email:"
+                    String email = scanner.nextLine().trim()
+
+                    println "Digite sua senha:"
+                    String senha = scanner.nextLine().trim()
+
+                    loginView.displayLogin(email, senha)
                     break
 
                 case "2":
-                    handleCandidateCRUD(scanner)
+                    CandidateDAO candidateDAO = new CandidateDAO(connection)
+
+                    CandidateController candidateController = new CandidateController(candidateDAO)
+
+                    CandidateView candidateView = new CandidateView(candidateController)
+
+                    candidateView.displayMenu()
                     break
 
                 case "3":
-                    handleCompanyCRUD(scanner)
+                    CompanyDAO companyDAO = new CompanyDAO(connection)
+
+                    CompanyController companyController = new CompanyController(companyDAO)
+
+                    CompanyView companyView = new CompanyView(companyController)
+
+                    companyView.displayMenu()
                     break
 
                 case "4":
-                    handleJobCRUD(scanner)
+                    CandidateDAO candidateDAO = new CandidateDAO(connection)
+
+                    AuthenticationService authService = new AuthenticationService(connection)
+
+                    LoginController loginController = new LoginController(authService, candidateDAO)
+
+                    LoginView loginView = new LoginView(loginController)
+
+                    println "Digite seu email:"
+                    String email = scanner.nextLine().trim()
+
+                    println "Digite sua senha:"
+                    String senha = scanner.nextLine().trim()
+
+                    Integer companyId = loginView.displayLogin(email, senha)
+
+                    if (companyId != null) {
+                        JobDAO jobDAO = new JobDAO(connection)
+
+                        JobController jobController = new JobController(jobDAO)
+
+                        JobView jobView = new JobView(jobController)
+
+                        jobView.displayMenu()
+                        break
+                    }
                     break
 
                 case "5":
+                    CompetenceDAO competenceDAO = new CompetenceDAO(connection)
+
+                    CompetenceController competenceController = new CompetenceController(competenceDAO)
+
+                    CompetenceView competenceView = new CompetenceView(competenceController)
+
+                    competenceView.displayMenu()
+                    break
+
+                case "6":
                     println "Saindo..."
                     exit = true
+                    ConnectionFactory.closeConnection()
                     break
 
                 default:
@@ -54,313 +115,9 @@ class Main {
         2 - CRUD Candidato
         3 - CRUD Empresa
         4 - CRUD Vaga
-        5 - Sair
+        5 - CRUD Competência
+        6 - Sair
         Escolha uma opção: 
         """
-    }
-
-    static void handleLogin(Scanner scanner) {
-        println "Email: "
-        String userEmail = scanner.nextLine().trim()
-        println "Senha: "
-        String userPassword = scanner.nextLine().trim()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        def userId = new AuthenticationService(connection).authenticate(userEmail, userPassword)
-
-        if (userId != null) {
-            println "Login efetuado.\n"
-            Candidate candidate = new CandidateDAO(connection).getById(userId)
-            println(candidate)
-        } else {
-            println "Email ou senha inválidos. Tente novamente."
-        }
-    }
-
-    static void handleCandidateCRUD(Scanner scanner) {
-        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
-        String opcao = scanner.nextLine().trim().toUpperCase()
-
-        switch (opcao) {
-            case "CREATE":
-                createCandidate(scanner)
-                break
-
-            case "READ":
-                readCandidate(scanner)
-                break
-
-            case "UPDATE":
-                updateCandidate(scanner)
-                break
-
-            case "DELETE":
-                deleteCandidate(scanner)
-                break
-
-            default:
-                println "Opção inválida."
-                break
-        }
-    }
-
-    static void createCandidate(Scanner scanner) {
-        println "Nome completo: "
-        String nome = scanner.nextLine().trim()
-        println "Data de nascimento (AAAA-MM-DD): "
-        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine().trim())
-        println "Email: "
-        String email = scanner.nextLine().trim()
-        println "CPF: "
-        String cpf = scanner.nextLine().trim()
-        println "País: "
-        String pais = scanner.nextLine().trim()
-        println "CEP: "
-        String cep = scanner.nextLine().trim()
-        println "Cargo desejado: "
-        String cargo = scanner.nextLine().trim()
-        println "Descrição pessoal/profissional: "
-        String descricao = scanner.nextLine().trim()
-        println "Senha: "
-        String senha = scanner.nextLine().trim()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        Candidate candidate = new Candidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
-
-        new CandidateDAO(connection).create(candidate)
-    }
-
-    static void readCandidate(Scanner scanner) {
-        println "Informe o ID do candidato: "
-        int idCandidato = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        Candidate candidato = new CandidateDAO(connection).getById(idCandidato)
-        println(candidato)
-    }
-
-    static void updateCandidate(Scanner scanner) {
-        println "Informe o ID do candidato a ser atualizado: "
-        int idCandidato = scanner.nextInt()
-        scanner.nextLine()
-
-        println "Novo nome completo: "
-        String nome = scanner.nextLine().trim()
-        println "Nova data de nascimento (AAAA-MM-DD): "
-        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine().trim())
-        println "Novo email: "
-        String email = scanner.nextLine().trim()
-        println "Novo CPF: "
-        String cpf = scanner.nextLine().trim()
-        println "Novo país: "
-        String pais = scanner.nextLine().trim()
-        println "Novo CEP: "
-        String cep = scanner.nextLine().trim()
-        println "Novo cargo desejado: "
-        String cargo = scanner.nextLine().trim()
-        println "Nova descrição pessoal/profissional: "
-        String descricao = scanner.nextLine().trim()
-        println "Nova senha: "
-        String senha = scanner.nextLine().trim()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        Candidate candidate = new Candidate(idCandidato, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
-
-        new CandidateDAO(connection).update(candidate)
-    }
-
-    static void deleteCandidate(Scanner scanner) {
-        println "Informe o ID do candidato a ser deletado: "
-        int idCandidato = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        new CandidateDAO(connection).delete(idCandidato)
-    }
-
-    static void handleCompanyCRUD(Scanner scanner) {
-        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
-        String opcao = scanner.nextLine().trim().toUpperCase()
-
-        switch (opcao) {
-            case "CREATE":
-                createCompany(scanner)
-                break
-
-            case "READ":
-                readCompany(scanner)
-                break
-
-            case "UPDATE":
-                updateCompany(scanner)
-                break
-
-            case "DELETE":
-                deleteCompany(scanner)
-                break
-
-            default:
-                println "Opção inválida."
-                break
-        }
-    }
-
-    static void createCompany(Scanner scanner) {
-        println "Nome da empresa: "
-        String nome = scanner.nextLine().trim()
-        println "CNPJ: "
-        String cnpj = scanner.nextLine().trim()
-        println "Email: "
-        String email = scanner.nextLine().trim()
-        println "Descrição da empresa: "
-        String descricao = scanner.nextLine().trim()
-        println "País: "
-        String pais = scanner.nextLine().trim()
-        println "CEP: "
-        String cep = scanner.nextLine().trim()
-        println "Senha: "
-        String senha = scanner.nextLine().trim()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        new CompanyDAO(connection).create(nome, cnpj, email, descricao, pais, cep, senha)
-    }
-
-    static void readCompany(Scanner scanner) {
-        println "Informe o ID da empresa: "
-        int idEmpresa = scanner.nextInt()
-        scanner.nextLine()
-
-        Company empresa = new CompanyDAO().getById(idEmpresa)
-        println(empresa)
-    }
-
-    static void updateCompany(Scanner scanner) {
-        println "Informe o ID da empresa a ser atualizada: "
-        int idEmpresa = scanner.nextInt()
-        scanner.nextLine()
-
-        println "Novo nome da empresa: "
-        String nome = scanner.nextLine().trim()
-        println "Novo CNPJ: "
-        String cnpj = scanner.nextLine().trim()
-        println "Novo email: "
-        String email = scanner.nextLine().trim()
-        println "Nova descrição da empresa: "
-        String descricao = scanner.nextLine().trim()
-        println "Novo país: "
-        String pais = scanner.nextLine().trim()
-        println "Novo CEP: "
-        String cep = scanner.nextLine().trim()
-        println "Nova senha: "
-        String senha = scanner.nextLine().trim()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        Company company = new Company(idEmpresa, nome, cnpj, email, descricao, pais, cep, senha)
-
-        new CompanyDAO(connection).update(company)
-    }
-
-    static void deleteCompany(Scanner scanner) {
-        println "Informe o ID da empresa a ser deletada: "
-        int idEmpresa = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        new CompanyDAO(connection).delete(idEmpresa)
-    }
-
-    static void handleJobCRUD(Scanner scanner) {
-        println "Digite qual operação deseja realizar (Create, Read, Update, Delete):"
-        String opcao = scanner.nextLine().trim().toUpperCase()
-
-        switch (opcao) {
-            case "CREATE":
-                createJob(scanner)
-                break
-
-            case "READ":
-                readJob(scanner)
-                break
-
-            case "UPDATE":
-                updateJob(scanner)
-                break
-
-            case "DELETE":
-                deleteJob(scanner)
-                break
-
-            default:
-                println "Opção inválida."
-                break
-        }
-    }
-
-    static void createJob(Scanner scanner) {
-        println "Cargo: "
-        String cargo = scanner.nextLine().trim()
-        println "Descrição da vaga: "
-        String descricao = scanner.nextLine().trim()
-        println "Local de trabalho: "
-        String local = scanner.nextLine().trim()
-        println "ID da empresa: "
-        int idEmpresa = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        Job job = new Job(cargo, descricao, local, idEmpresa)
-
-        new JobDAO(connection).create(job)
-    }
-
-    static void readJob(Scanner scanner) {
-        println "Informe o ID da vaga: "
-        int idVaga = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        def vaga = new JobDAO(connection).getById(idVaga)
-        println(vaga)
-    }
-
-    static void updateJob(Scanner scanner) {
-        println "Informe o ID da vaga a ser atualizada: "
-        int idVaga = scanner.nextInt()
-        scanner.nextLine()
-
-        println "Novo cargo: "
-        String cargo = scanner.nextLine().trim()
-        println "Nova descrição da vaga: "
-        String descricao = scanner.nextLine().trim()
-        println "Novo local de trabalho: "
-        String local = scanner.nextLine().trim()
-        println "ID da empresa: "
-        int idEmpresa = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        new JobDAO(connection).update(idVaga, cargo, descricao, local, idEmpresa)
-    }
-
-    static void deleteJob(Scanner scanner) {
-        println "Informe o ID da vaga a ser deletada: "
-        int idVaga = scanner.nextInt()
-        scanner.nextLine()
-
-        Connection connection = DatabaseConnection.getConnection()
-
-        new JobDAO(connection).delete(idVaga)
     }
 }

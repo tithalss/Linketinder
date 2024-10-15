@@ -22,8 +22,6 @@ class LikeDAO {
             pstmt.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -36,8 +34,6 @@ class LikeDAO {
             pstmt.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
     }
 
@@ -67,8 +63,6 @@ class LikeDAO {
 
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return matchs
     }
@@ -98,8 +92,6 @@ class LikeDAO {
 
         } catch (SQLException e) {
             e.printStackTrace()
-        } finally {
-            DatabaseConnection.closeConnection()
         }
         return matchs
     }
