@@ -14,6 +14,8 @@ class Candidate {
     private String descricao
     private String senha
 
+    Candidate () {}
+
     Candidate(int id, String nomeCompleto, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
         this.id = id
         this.nomeCompleto = nomeCompleto

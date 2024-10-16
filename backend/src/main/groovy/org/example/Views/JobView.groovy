@@ -53,18 +53,19 @@ class JobView {
         println "Criar uma nova vaga:"
 
         print "Cargo: "
-        String cargo = scanner.nextLine()
+        String cargo = scanner.nextLine().trim()
 
         print "Descrição: "
-        String descricao = scanner.nextLine()
+        String descricao = scanner.nextLine().trim()
 
         print "Local: "
-        String local = scanner.nextLine()
+        String local = scanner.nextLine().trim()
 
         print "ID da empresa: "
-        int idEmpresa = Integer.parseInt(scanner.nextLine())
+        int idEmpresa = Integer.parseInt(scanner.nextLine().trim())
+        //scanner.nextLine()
 
-        Job job = new Job(0, cargo, descricao, local, idEmpresa) // ID gerado automaticamente
+        Job job = new Job(1, cargo, descricao, local, idEmpresa)
         jobController.createJob(job)
 
         println "Vaga criada com sucesso!"

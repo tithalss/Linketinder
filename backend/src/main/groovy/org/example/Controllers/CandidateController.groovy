@@ -12,8 +12,8 @@ class CandidateController {
         this.candidateDAO = candidateDAO
     }
 
-    void createCandidate(String nome, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
-        Candidate candidate = new Candidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+    void createCandidate(String nomeCompleto, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
+        Candidate candidate = new Candidate(nomeCompleto, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
         candidateDAO.create(candidate)
     }
 

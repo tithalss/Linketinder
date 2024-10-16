@@ -3,7 +3,7 @@ package org.example.Views
 import org.example.Controllers.LoginController
 import org.example.Models.Candidate
 
-public class LoginView {
+class LoginView {
 
     private final LoginController loginController
 

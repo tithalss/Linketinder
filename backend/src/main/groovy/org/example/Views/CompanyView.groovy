@@ -1,7 +1,6 @@
 package org.example.Views
 
 import org.example.Controllers.CompanyController
-import java.util.Scanner
 
 class CompanyView {
     private final CompanyController companyController

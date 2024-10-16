@@ -1,0 +1,1 @@
+(()=>{"use strict";document.addEventListener("DOMContentLoaded",(()=>{document.getElementById("formulario-empresa").addEventListener("submit",(e=>{e.preventDefault(),document.getElementById("email").value,document.getElementById("senha").value}))}))})();

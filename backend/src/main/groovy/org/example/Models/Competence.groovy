@@ -4,6 +4,8 @@ class Competence {
     private int id
     private String nome
 
+    Competence () {}
+
     Competence(int id, String nome) {
         this.id = id
         this.nome = nome

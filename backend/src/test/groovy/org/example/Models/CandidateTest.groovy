@@ -1,9 +1,9 @@
 package org.example.Models
 
 
-import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import static org.junit.jupiter.api.Assertions.*
 
 class CandidateTest {
 

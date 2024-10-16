@@ -58,32 +58,13 @@ class Main {
                     break
 
                 case "4":
-                    CandidateDAO candidateDAO = new CandidateDAO(connection)
+                    JobDAO jobDAO = new JobDAO(connection)
 
-                    AuthenticationService authService = new AuthenticationService(connection)
+                    JobController jobController = new JobController(jobDAO)
 
-                    LoginController loginController = new LoginController(authService, candidateDAO)
+                    JobView jobView = new JobView(jobController)
 
-                    LoginView loginView = new LoginView(loginController)
-
-                    println "Digite seu email:"
-                    String email = scanner.nextLine().trim()
-
-                    println "Digite sua senha:"
-                    String senha = scanner.nextLine().trim()
-
-                    Integer companyId = loginView.displayLogin(email, senha)
-
-                    if (companyId != null) {
-                        JobDAO jobDAO = new JobDAO(connection)
-
-                        JobController jobController = new JobController(jobDAO)
-
-                        JobView jobView = new JobView(jobController)
-
-                        jobView.displayMenu()
-                        break
-                    }
+                    jobView.displayMenu()
                     break
 
                 case "5":

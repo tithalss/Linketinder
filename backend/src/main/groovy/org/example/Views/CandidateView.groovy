@@ -77,7 +77,7 @@ class CandidateView {
         println "== Atualizar Candidato =="
         print "ID do Candidato: "
         def id = scanner.nextInt()
-        scanner.nextLine() // Consumir a quebra de linha
+        scanner.nextLine()
         print "Nome: "
         def nome = scanner.nextLine()
         print "Data de Nascimento (YYYY-MM-DD): "
@@ -104,7 +104,7 @@ class CandidateView {
         println "== Buscar Candidato por ID =="
         print "ID do Candidato: "
         Integer id = scanner.nextInt()
-        scanner.nextLine() // Consumir a quebra de linha
+        scanner.nextLine()
         Candidate candidate = candidateController.getCandidateById(id)
         if (candidate) {
             println "Nome: ${candidate.nomeCompleto}"
@@ -116,7 +116,7 @@ class CandidateView {
         println "== Deletar Candidato =="
         print "ID do Candidato: "
         def id = scanner.nextInt()
-        scanner.nextLine() // Consumir a quebra de linha
+        scanner.nextLine()
         candidateController.deleteCandidate(id)
     }
 }
