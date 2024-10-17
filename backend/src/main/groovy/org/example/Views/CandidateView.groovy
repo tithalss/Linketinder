@@ -76,28 +76,30 @@ class CandidateView {
     void updateCandidate(Scanner scanner) {
         println "== Atualizar Candidato =="
         print "ID do Candidato: "
-        def id = scanner.nextInt()
+        int id = scanner.nextInt()
         scanner.nextLine()
         print "Nome: "
-        def nome = scanner.nextLine()
+        String nome = scanner.nextLine()
         print "Data de Nascimento (YYYY-MM-DD): "
-        def dataNascimento = LocalDate.parse(scanner.nextLine())
+        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
         print "Email: "
-        def email = scanner.nextLine()
+        String email = scanner.nextLine()
         print "CPF: "
-        def cpf = scanner.nextLine()
+        String cpf = scanner.nextLine()
         print "País: "
-        def pais = scanner.nextLine()
+        String pais = scanner.nextLine()
         print "CEP: "
-        def cep = scanner.nextLine()
+        String cep = scanner.nextLine()
         print "Cargo: "
-        def cargo = scanner.nextLine()
+        String cargo = scanner.nextLine()
         print "Descrição: "
-        def descricao = scanner.nextLine()
+        String descricao = scanner.nextLine()
         print "Senha: "
-        def senha = scanner.nextLine()
+        String senha = scanner.nextLine()
 
-        candidateController.updateCandidate(id, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+        Candidate candidate = new Candidate(id, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+
+        candidateController.updateCandidate(candidate)
     }
 
     void getCandidateById(Scanner scanner) {

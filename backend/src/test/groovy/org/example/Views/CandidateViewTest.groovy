@@ -67,7 +67,7 @@ class CandidateViewTest {
 
         candidateView.updateCandidate(scanner)
 
-        Candidate candidate = new Candidate(1, "Cristiano Ronaldo", LocalDate.of(1996-03-02), "cr7@gmail.com", "07489856445", "Portugal", "78888546", "Striker", "Melhor do munndo", "papaicris")
+        Candidate candidate = new Candidate(1, "Cristiano Ronaldo", LocalDate.of(1996, 03, 02), "cr7@gmail.com", "07489856445", "Portugal", "78888546", "Striker", "Melhor do munndo", "papaicris")
 
         verify(candidateController).updateCandidate(candidate)
     }

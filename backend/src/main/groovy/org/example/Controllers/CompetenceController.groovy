@@ -11,13 +11,11 @@ class CompetenceController {
         this.competenceDAO = competenceDAO
     }
 
-    void createCompetence(String nome) {
-        Competence competence = new Competence(nome)
+    void createCompetence(Competence competence) {
         competenceDAO.create(competence)
     }
 
-    void updateCompetence(int id, String nome) {
-        Competence competence = new Competence(id, nome)
+    void updateCompetence(Competence competence) {
         competenceDAO.update(competence)
     }
 

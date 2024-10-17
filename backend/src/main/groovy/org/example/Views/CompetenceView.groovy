@@ -50,7 +50,8 @@ class CompetenceView {
     void createCompetence(Scanner scanner) {
         println "Digite o nome da nova competência:"
         String nome = scanner.nextLine()
-        competenceController.createCompetence(nome)
+        Competence competence = new Competence(nome)
+        competenceController.createCompetence(competence)
     }
 
     void updateCompetence(Scanner scanner) {
@@ -59,7 +60,8 @@ class CompetenceView {
         scanner.nextLine()
         println "Digite o novo nome da competência:"
         String nome = scanner.nextLine()
-        competenceController.updateCompetence(id, nome)
+        Competence competence = new Competence(id, nome)
+        competenceController.updateCompetence(competence)
     }
 
     void getCompetenceById(Scanner scanner) {

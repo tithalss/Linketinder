@@ -2,8 +2,7 @@ package org.example.Controllers
 
 import org.example.ClassesDAO.CandidateDAO
 import org.example.Models.Candidate
-
-import java.time.LocalDate
+import org.example.Models.Company
 
 class CandidateController {
     private final CandidateDAO candidateDAO
@@ -12,13 +11,17 @@ class CandidateController {
         this.candidateDAO = candidateDAO
     }
 
-    void createCandidate(String nomeCompleto, LocalDate dataNascimento, String email, String cpf, String pais, String cep, String cargo, String descricao, String senha) {
-        Candidate candidate = new Candidate(nomeCompleto, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+    void createCandidate(Candidate candidate) {
         candidateDAO.create(candidate)
     }
 
     Candidate getCandidateById(int id) {
-        return candidateDAO.getById(id)
+        Candidate candidate = candidateDAO.getById(id)
+        if (candidate != null) {
+            return candidate
+        } else {
+            return null
+        }
     }
 
     void updateCandidate(Candidate candidate) {

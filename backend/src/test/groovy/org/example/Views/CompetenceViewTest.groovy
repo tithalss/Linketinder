@@ -25,17 +25,21 @@ class CompetenceViewTest {
 
         competenceView.createCompetence(scanner)
 
-        Mockito.verify(competenceController, Mockito.times(1)).createCompetence("Programação")
+        Competence competence = new Competence("Programação")
+
+        Mockito.verify(competenceController, Mockito.times(1)).createCompetence(competence)
     }
 
     @Test
     void testUpdateCompetence() {
         Mockito.when(scanner.nextInt()).thenReturn(1)
-        Mockito.when(scanner.nextLine()).thenReturn("Programação Avançada")
+        Mockito.when(scanner.nextLine()).thenReturn("").thenReturn("Programação Avançada")
 
         competenceView.updateCompetence(scanner)
 
-        Mockito.verify(competenceController, Mockito.times(1)).updateCompetence(1, "Programação Avançada")
+        Competence competence = new Competence(1, "Programação Avançada")
+
+        Mockito.verify(competenceController, Mockito.times(1)).updateCompetence(competence)
     }
 
     @Test

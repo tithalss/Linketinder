@@ -4,72 +4,63 @@ import org.example.ClassesDAO.CompanyDAO
 import org.example.Models.Company
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
 import static org.mockito.Mockito.*
 
 class CompanyControllerTest {
 
-    @Mock
     CompanyDAO companyDAO
-
-    @InjectMocks
     CompanyController companyController
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this)
+        companyDAO = mock(CompanyDAO)
+        companyController = new CompanyController(companyDAO)
     }
 
     @Test
     void testCreateCompany() {
-        String nome = "Tech Company"
-        String cnpj = "12345678000100"
-        String email = "contato@techcompany.com"
-        String descricao = "Desenvolvimento de software"
-        String pais = "Brasil"
-        String cep = "12345678"
-        String senha = "senhaSegura123"
+        Company company = new Company(1, "Tech Corp", "techcorp@gmail.com", "11254655234512", "Brasil", "95995245", "T.I.", "senhatech")
 
-        companyController.createCompany(nome, cnpj, email, descricao, pais, cep, senha)
+        companyController.createCompany(company)
 
-        verify(companyDAO, times(1)).create(any(Company))
+        verify(companyDAO).create(company)
     }
 
     @Test
     void testUpdateCompany() {
-        int id = 1
-        String nome = "Tech Company Updated"
-        String cnpj = "12345678000100"
-        String email = "updated@techcompany.com"
-        String descricao = "Desenvolvimento de software atualizado"
-        String pais = "Brasil"
-        String cep = "12345678"
-        String senha = "novaSenhaSegura123"
+        Company company = new Company(1, "Tech Corp", "techcorp@gmail.com", "11254655234512", "Brasil", "95995245", "T.I.", "senhatech")
 
-        companyController.updateCompany(id, nome, cnpj, email, descricao, pais, cep, senha)
+        companyController.updateCompany(company)
 
-        verify(companyDAO, times(1)).update(any(Company))
+        verify(companyDAO).update(company)
     }
 
     @Test
     void testGetCompanyById() {
-        def company = new Company(1, "Tech Company", "12345678000100", "contato@techcompany.com", "Desenvolvimento de software", "Brasil", "12345-678", "senhaSegura123")
+        Company company = new Company(1, "Tech Corp", "techcorp@gmail.com", "11254655234512", "Brasil", "95995245", "T.I.", "senhatech")
         when(companyDAO.getById(1)).thenReturn(company)
 
-        companyController.getCompanyById(1)
+        Company result = companyController.getCompanyById(1)
 
-        verify(companyDAO, times(1)).getById(1)
+        assert result == company
+        verify(companyDAO).getById(1)
+    }
+
+    @Test
+    void testGetCompanyByIdNotFound() {
+        when(companyDAO.getById(1)).thenReturn(null)
+
+        Company result = companyController.getCompanyById(1)
+
+        assert result == null
+        verify(companyDAO).getById(1)
     }
 
     @Test
     void testDeleteCompany() {
-        def id = 1
+        companyController.deleteCompany(1)
 
-        companyController.deleteCompany(id)
-
-        verify(companyDAO, times(1)).delete(id)
+        verify(companyDAO).delete(1)
     }
 }

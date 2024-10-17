@@ -1,6 +1,7 @@
 package org.example.Controllers
 
 import org.example.ClassesDAO.JobDAO
+import org.example.Models.Candidate
 import org.example.Models.Job
 
 class JobController {
@@ -16,7 +17,12 @@ class JobController {
     }
 
     Job getJobById(int id) {
-        return jobDAO.getById(id)
+        Job job = jobDAO.getById(id)
+        if (job != null) {
+            return job
+        } else {
+            return null
+        }
     }
 
     void updateJob(Job job) {
