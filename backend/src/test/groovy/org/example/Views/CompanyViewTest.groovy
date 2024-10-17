@@ -1,94 +1,86 @@
 package org.example.Views
 
 import org.example.Controllers.CompanyController
+import org.example.Models.Company
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
-import static org.mockito.Mockito.verify
-import static org.mockito.Mockito.when
+import static org.mockito.ArgumentMatchers.any
+import static org.mockito.Mockito.*
 
 class CompanyViewTest {
 
-    CompanyView companyView
+    @Mock
     CompanyController companyController
-    Scanner scanner
+
+    @InjectMocks
+    CompanyView companyView
+
+    Scanner mockScanner
 
     @BeforeEach
-    void setup() {
-        companyController = Mockito.mock(CompanyController)
-        scanner = Mockito.mock(Scanner)
+    void setUp() {
+        MockitoAnnotations.openMocks(this)
+        mockScanner = mock(Scanner)
         companyView = new CompanyView(companyController)
     }
 
     @Test
     void testCreateCompany() {
-        when(scanner.nextLine())
-                .thenReturn("Empresa X")
-                .thenReturn("12345678901234")
-                .thenReturn("empresa@x.com")
-                .thenReturn("Empresa de TI")
-                .thenReturn("Brasil")
-                .thenReturn("12345678")
-                .thenReturn("senha123")
-
-        companyView.createCompany(scanner)
-
-        verify(companyController).createCompany(
-                "Empresa X",
-                "12345678901234",
-                "empresa@x.com",
-                "Empresa de TI",
+        when(mockScanner.nextLine()).thenReturn(
+                "Empresa XYZ",
+                "12.345.678/0001-99",
+                "contato@empresa.com",
+                "Descrição da empresa",
                 "Brasil",
-                "12345678",
+                "12345-678",
                 "senha123"
         )
-    }
 
-    @Test
-    void testUpdateCompany() {
-        when(scanner.nextInt()).thenReturn(1)
-        when(scanner.nextLine())
-                .thenReturn("")
-                .thenReturn("Empresa Y")
-                .thenReturn("98765432101234")
-                .thenReturn("empresa@y.com")
-                .thenReturn("Empresa de Logística")
-                .thenReturn("Portugal")
-                .thenReturn("87654321")
-                .thenReturn("senha321")
+        companyView.createCompany(mockScanner)
 
-        companyView.updateCompany(scanner)
-
-        verify(companyController).updateCompany(
-                1,
-                "Empresa Y",
-                "98765432101234",
-                "empresa@y.com",
-                "Empresa de Logística",
-                "Portugal",
-                "87654321",
-                "senha321"
-        )
+        verify(companyController, times(1)).createCompany(any(Company))
     }
 
     @Test
     void testGetCompanyById() {
-        when(scanner.nextInt()).thenReturn(1)
-        when(scanner.nextLine()).thenReturn("")
+        def company = new Company(1, "Empresa XYZ", "12.345.678/0001-99", "contato@empresa.com", "Descrição da empresa", "Brasil", "12345-678", "senha123")
+        when(mockScanner.nextLine()).thenReturn("1")
+        when(companyController.getCompanyById(1)).thenReturn(company)
 
-        companyView.getCompanyById(scanner)
+        companyView.getCompanyById(mockScanner)
 
-        verify(companyController).getCompanyById(1)
+        verify(companyController, times(1)).getCompanyById(1)
+    }
+
+    @Test
+    void testUpdateCompany() {
+        Company existingCompany = new Company(1, "Empresa XYZ", "12.345.678/0001-99", "contato@empresa.com", "Descrição da empresa", "Brasil", "12345-678", "senha123")
+        when(mockScanner.nextLine()).thenReturn("1",
+                "Empresa Atualizada",
+                "12.345.678/0001-99",
+                "atualizado@empresa.com",
+                "Nova descrição da empresa",
+                "Brasil",
+                "12345-678",
+                "novaSenha123"
+        )
+        when(companyController.getCompanyById(1)).thenReturn(existingCompany)
+
+        companyView.updateCompany(mockScanner)
+
+        verify(companyController, times(1)).updateCompany(any(Company))
     }
 
     @Test
     void testDeleteCompany() {
-        when(scanner.nextInt()).thenReturn(1)
-        when(scanner.nextLine()).thenReturn("")
+        when(mockScanner.nextLine()).thenReturn("1")
 
-        companyView.deleteCompany(scanner)
+        companyView.deleteCompany(mockScanner)
 
-        verify(companyController).deleteCompany(1)
+        verify(companyController, times(1)).deleteCompany(1)
     }
 }

@@ -50,26 +50,35 @@ class CompetenceView {
     void createCompetence(Scanner scanner) {
         println "Digite o nome da nova competência:"
         String nome = scanner.nextLine()
+
         Competence competence = new Competence(nome)
         competenceController.createCompetence(competence)
     }
 
     void updateCompetence(Scanner scanner) {
         println "Digite o ID da competência que deseja atualizar:"
-        Integer id = scanner.nextInt()
-        scanner.nextLine()
-        println "Digite o novo nome da competência:"
-        String nome = scanner.nextLine()
-        Competence competence = new Competence(id, nome)
-        competenceController.updateCompetence(competence)
+        Integer id = Integer.parseInt(scanner.nextLine())
+        Competence existingCompetence = competenceController.getCompetenceById(id)
+        if (existingCompetence) {
+            println "Digite o novo nome da competência (atual: ${existingCompetence.nome}):"
+            String nome = scanner.nextLine()
+
+            Competence updatedCompetence = new Competence(id, nome)
+            competenceController.updateCompetence(updatedCompetence)
+            println "Competência atualizada com sucesso!"
+        } else {
+            println "Competência não encontrada."
+        }
     }
 
     void getCompetenceById(Scanner scanner) {
         println "Digite o ID da competência que deseja buscar:"
-        Integer id = scanner.nextInt()
+        Integer id = Integer.parseInt(scanner.nextLine())
         Competence competence = competenceController.getCompetenceById(id)
         if (competence) {
             println "Competência: ${competence.nome}"
+        } else {
+            println "Competência não encontrada."
         }
     }
 

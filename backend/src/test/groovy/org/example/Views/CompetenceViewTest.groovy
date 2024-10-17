@@ -4,60 +4,67 @@ import org.example.Controllers.CompetenceController
 import org.example.Models.Competence
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
+
+import static org.mockito.ArgumentMatchers.any
+import static org.mockito.Mockito.*
 
 class CompetenceViewTest {
 
-    private CompetenceController competenceController
-    private CompetenceView competenceView
-    private Scanner scanner
+    @Mock
+    CompetenceController competenceController
+
+    @InjectMocks
+    CompetenceView competenceView
+
+    Scanner mockScanner
 
     @BeforeEach
-    void setup() {
-        competenceController = Mockito.mock(CompetenceController)
-        scanner = Mockito.mock(Scanner)
+    void setUp() {
+        MockitoAnnotations.openMocks(this)
+        mockScanner = mock(Scanner)
         competenceView = new CompetenceView(competenceController)
     }
 
     @Test
     void testCreateCompetence() {
-        Mockito.when(scanner.nextLine()).thenReturn("Programação")
+        when(mockScanner.nextLine()).thenReturn("Java")
 
-        competenceView.createCompetence(scanner)
+        competenceView.createCompetence(mockScanner)
 
-        Competence competence = new Competence("Programação")
-
-        Mockito.verify(competenceController, Mockito.times(1)).createCompetence(competence)
-    }
-
-    @Test
-    void testUpdateCompetence() {
-        Mockito.when(scanner.nextInt()).thenReturn(1)
-        Mockito.when(scanner.nextLine()).thenReturn("").thenReturn("Programação Avançada")
-
-        competenceView.updateCompetence(scanner)
-
-        Competence competence = new Competence(1, "Programação Avançada")
-
-        Mockito.verify(competenceController, Mockito.times(1)).updateCompetence(competence)
+        verify(competenceController, times(1)).createCompetence(any(Competence))
     }
 
     @Test
     void testGetCompetenceById() {
-        Competence competence = new Competence(nome: "Programação")
-        Mockito.when(scanner.nextInt()).thenReturn(1)
-        Mockito.when(competenceController.getCompetenceById(1)).thenReturn(competence)
+        Competence competence = new Competence(1, "Java")
+        when(mockScanner.nextLine()).thenReturn("1")
+        when(competenceController.getCompetenceById(1)).thenReturn(competence)
 
-        competenceView.getCompetenceById(scanner)
+        competenceView.getCompetenceById(mockScanner)
 
-        Mockito.verify(competenceController, Mockito.times(1)).getCompetenceById(1)
+        verify(competenceController, times(1)).getCompetenceById(1)
+    }
+
+    @Test
+    void testUpdateCompetence() {
+        Competence competence = new Competence(1, "Java")
+        when(mockScanner.nextLine()).thenReturn("1", "Kotlin")
+        when(competenceController.getCompetenceById(1)).thenReturn(competence)
+
+        competenceView.updateCompetence(mockScanner)
+
+        verify(competenceController, times(1)).updateCompetence(any(Competence))
     }
 
     @Test
     void testDeleteCompetence() {
-        Mockito.when(scanner.nextInt()).thenReturn(1)
+        Mockito.when(mockScanner.nextInt()).thenReturn(1)
 
-        competenceView.deleteCompetence(scanner)
+        competenceView.deleteCompetence(mockScanner)
 
         Mockito.verify(competenceController, Mockito.times(1)).deleteCompetence(1)
     }

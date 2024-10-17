@@ -50,7 +50,7 @@ class JobViewTest {
 
     @Test
     void testUpdateJob() {
-        def job = new Job(1, "Desenvolvedor", "Desenvolver aplicações", "São Paulo", 123)
+        Job job = new Job(1, "Desenvolvedor", "Desenvolver aplicações", "São Paulo", 123)
         when(mockScanner.nextLine()).thenReturn("1", "Novo Cargo", "Nova Descrição", "Novo Local", "456")
         when(jobController.getJobById(1)).thenReturn(job)
 

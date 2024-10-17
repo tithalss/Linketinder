@@ -4,7 +4,6 @@ import org.example.Controllers.CandidateController
 import org.example.Models.Candidate
 
 import java.time.LocalDate
-import java.util.Scanner
 
 class CandidateView {
     private final CandidateController candidateController
@@ -52,73 +51,102 @@ class CandidateView {
     void createCandidate(Scanner scanner) {
         println "== Criar Novo Candidato =="
         print "Nome: "
-        def nome = scanner.nextLine()
-        print "Data de Nascimento (YYYY-MM-DD): "
-        def dataNascimento = LocalDate.parse(scanner.nextLine())
-        print "Email: "
-        def email = scanner.nextLine()
-        print "CPF: "
-        def cpf = scanner.nextLine()
-        print "País: "
-        def pais = scanner.nextLine()
-        print "CEP: "
-        def cep = scanner.nextLine()
-        print "Cargo: "
-        def cargo = scanner.nextLine()
-        print "Descrição: "
-        def descricao = scanner.nextLine()
-        print "Senha: "
-        def senha = scanner.nextLine()
+        String nome = scanner.nextLine()
 
-        candidateController.createCandidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+        print "Data de Nascimento (YYYY-MM-DD): "
+        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
+
+        print "Email: "
+        String email = scanner.nextLine()
+
+        print "CPF: "
+        String cpf = scanner.nextLine()
+
+        print "País: "
+        String pais = scanner.nextLine()
+
+        print "CEP: "
+        String cep = scanner.nextLine()
+
+        print "Cargo: "
+        String cargo = scanner.nextLine()
+
+        print "Descrição: "
+        String descricao = scanner.nextLine()
+
+        print "Senha: "
+        String senha = scanner.nextLine()
+
+        Candidate candidate = new Candidate(nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+
+        candidateController.createCandidate(candidate)
+
+        println "Candidato criado com sucesso."
     }
 
     void updateCandidate(Scanner scanner) {
         println "== Atualizar Candidato =="
         print "ID do Candidato: "
-        int id = scanner.nextInt()
-        scanner.nextLine()
-        print "Nome: "
-        String nome = scanner.nextLine()
-        print "Data de Nascimento (YYYY-MM-DD): "
-        LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
-        print "Email: "
-        String email = scanner.nextLine()
-        print "CPF: "
-        String cpf = scanner.nextLine()
-        print "País: "
-        String pais = scanner.nextLine()
-        print "CEP: "
-        String cep = scanner.nextLine()
-        print "Cargo: "
-        String cargo = scanner.nextLine()
-        print "Descrição: "
-        String descricao = scanner.nextLine()
-        print "Senha: "
-        String senha = scanner.nextLine()
+        int id = Integer.parseInt(scanner.nextLine())
 
-        Candidate candidate = new Candidate(id, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+        Candidate existingCandidate = candidateController.getCandidateById(id)
+        if (existingCandidate) {
+            print "Nome: "
+            String nome = scanner.nextLine()
 
-        candidateController.updateCandidate(candidate)
+            print "Data de Nascimento (YYYY-MM-DD): "
+            LocalDate dataNascimento = LocalDate.parse(scanner.nextLine())
+
+            print "Email: "
+            String email = scanner.nextLine()
+
+            print "CPF: "
+            String cpf = scanner.nextLine()
+
+            print "País: "
+            String pais = scanner.nextLine()
+
+            print "CEP: "
+            String cep = scanner.nextLine()
+
+            print "Cargo: "
+            String cargo = scanner.nextLine()
+
+            print "Descrição: "
+            String descricao = scanner.nextLine()
+
+            print "Senha: "
+            String senha = scanner.nextLine()
+
+            Candidate updatedCandidate = new Candidate(id, nome, dataNascimento, email, cpf, pais, cep, cargo, descricao, senha)
+
+            candidateController.updateCandidate(updatedCandidate)
+
+            println "Candidato atualizado com sucesso."
+        } else {
+            println "Candidato não encontrado."
+        }
     }
 
     void getCandidateById(Scanner scanner) {
         println "== Buscar Candidato por ID =="
         print "ID do Candidato: "
-        Integer id = scanner.nextInt()
-        scanner.nextLine()
+        Integer id = Integer.parseInt(scanner.nextLine())
+
         Candidate candidate = candidateController.getCandidateById(id)
         if (candidate) {
             println "Nome: ${candidate.nomeCompleto}"
-            println ""
+            println "Cargo: ${candidate.cargo}"
+        } else {
+            println "Candidato não encontrado."
         }
     }
 
     void deleteCandidate(Scanner scanner) {
         println "== Deletar Candidato =="
         print "ID do Candidato: "
-        def id = scanner.nextInt()
-        scanner.nextLine()
+        int id = Integer.parseInt(scanner.nextLine())
         candidateController.deleteCandidate(id)
+        println "Candidato excluído com sucesso."
     }
 }

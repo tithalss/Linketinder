@@ -53,19 +53,19 @@ class JobView {
         println "Criar uma nova vaga:"
 
         print "Cargo: "
-        String cargo = scanner.nextLine().trim()
+        String cargo = scanner.nextLine()
 
         print "Descrição: "
-        String descricao = scanner.nextLine().trim()
+        String descricao = scanner.nextLine()
 
         print "Local: "
-        String local = scanner.nextLine().trim()
+        String local = scanner.nextLine()
 
         print "ID da empresa: "
-        int idEmpresa = Integer.parseInt(scanner.nextLine().trim())
-        //scanner.nextLine()
+        int idEmpresa = Integer.parseInt(scanner.nextLine())
 
         Job job = new Job(1, cargo, descricao, local, idEmpresa)
+        
         jobController.createJob(job)
 
         println "Vaga criada com sucesso!"
@@ -107,7 +107,7 @@ class JobView {
 
             Job updatedJob = new Job(id, cargo, descricao, local, idEmpresa)
             jobController.updateJob(updatedJob)
-            println "Vaga atualizada com sucesso!"
+            println "Vaga atualizada com sucesso."
         } else {
             println "Vaga não encontrada."
         }
@@ -117,6 +117,6 @@ class JobView {
         print "Digite o ID da vaga que deseja deletar: "
         int id = Integer.parseInt(scanner.nextLine())
         jobController.deleteJob(id)
-        println "Vaga deletada com sucesso!"
+        println "Vaga deletada com sucesso."
     }
 }

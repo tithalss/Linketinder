@@ -2,7 +2,6 @@ package org.example.Controllers
 
 import org.example.ClassesDAO.CandidateDAO
 import org.example.Models.Candidate
-import org.example.Models.Company
 
 class CandidateController {
     private final CandidateDAO candidateDAO

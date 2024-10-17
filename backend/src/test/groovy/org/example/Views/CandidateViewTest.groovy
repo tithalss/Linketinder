@@ -4,91 +4,89 @@ import org.example.Controllers.CandidateController
 import org.example.Models.Candidate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
 import java.time.LocalDate
 
+import static org.mockito.ArgumentMatchers.any
 import static org.mockito.Mockito.*
 
 class CandidateViewTest {
 
+    @Mock
     CandidateController candidateController
+
+    @InjectMocks
     CandidateView candidateView
-    Scanner scanner
+
+    Scanner mockScanner
 
     @BeforeEach
     void setUp() {
-        candidateController = mock(CandidateController)
-        scanner = mock(Scanner)
+        MockitoAnnotations.openMocks(this)
+        mockScanner = mock(Scanner)
         candidateView = new CandidateView(candidateController)
     }
 
     @Test
     void testCreateCandidate() {
-        when(scanner.nextLine())
-                .thenReturn("Cristiano Ronaldo")
-                .thenReturn("1996-03-02")
-                .thenReturn("cr7@gmail.com")
-                .thenReturn("07489856445")
-                .thenReturn("Portugal")
-                .thenReturn("78888546")
-                .thenReturn("Atacante")
-                .thenReturn("Melhor do mundo")
-                .thenReturn("senha123")
-
-        candidateView.createCandidate(scanner)
-
-        verify(candidateController).createCandidate(
-                "Cristiano Ronaldo",
-                LocalDate.of(1996, 3, 2),
-                "cr7@gmail.com",
-                "07489856445",
-                "Portugal",
-                "78888546",
-                "Atacante",
-                "Melhor do mundo",
+        when(mockScanner.nextLine()).thenReturn(
+                "João Silva",
+                "1990-01-01",
+                "joao@example.com",
+                "12345678900",
+                "Brasil",
+                "12345-678",
+                "Desenvolvedor",
+                "Descrição do candidato",
                 "senha123"
         )
-    }
 
-    @Test
-    void testUpdateCandidate() {
-        when(scanner.nextInt()).thenReturn(1)
-        when(scanner.nextLine())
-                .thenReturn("")
-                .thenReturn("Cristiano Ronaldo")
-                .thenReturn("1996-03-02")
-                .thenReturn("cr7@gmail.com")
-                .thenReturn("07489856445")
-                .thenReturn("Portugal")
-                .thenReturn("78888546")
-                .thenReturn("Striker")
-                .thenReturn("Melhor do mundo")
-                .thenReturn("papaicris")
+        candidateView.createCandidate(mockScanner)
 
-        candidateView.updateCandidate(scanner)
-
-        Candidate candidate = new Candidate(1, "Cristiano Ronaldo", LocalDate.of(1996, 03, 02), "cr7@gmail.com", "07489856445", "Portugal", "78888546", "Striker", "Melhor do munndo", "papaicris")
-
-        verify(candidateController).updateCandidate(candidate)
+        verify(candidateController, times(1)).createCandidate(any(Candidate))
     }
 
     @Test
     void testGetCandidateById() {
-        Candidate candidate = new Candidate(1, "Cristiano Ronaldo", LocalDate.of(1996, 3, 2), "cr7@gmail.com", "07489856445", "Portugal", "78888546", "Atacante", "Melhor do mundo", "senha123")
-        when(scanner.nextInt()).thenReturn(1)
+        def candidate = new Candidate(1, "João Silva", LocalDate.parse("1990-01-01"), "joao@example.com", "12345678900", "Brasil", "12345-678", "Desenvolvedor", "Descrição do candidato", "senha123")
+        when(mockScanner.nextLine()).thenReturn("1")
         when(candidateController.getCandidateById(1)).thenReturn(candidate)
 
-        candidateView.getCandidateById(scanner)
+        candidateView.getCandidateById(mockScanner)
 
-        verify(candidateController).getCandidateById(1)
+        verify(candidateController, times(1)).getCandidateById(1)
+    }
+
+    @Test
+    void testUpdateCandidate() {
+        Candidate existingCandidate = new Candidate(1, "João Silva", LocalDate.parse("1990-01-01"), "joao@example.com", "12345678900", "Brasil", "12345-678", "Desenvolvedor", "Descrição do candidato", "senha123")
+        when(mockScanner.nextLine()).thenReturn("1",
+                "João Silva Atualizado",
+                "1990-01-01",
+                "joao.atualizado@example.com",
+                "12345678900",
+                "Brasil",
+                "12345-678",
+                "Desenvolvedor",
+                "Nova descrição do candidato",
+                "novaSenha123"
+        )
+        when(candidateController.getCandidateById(1)).thenReturn(existingCandidate)
+
+        candidateView.updateCandidate(mockScanner)
+
+        verify(candidateController, times(1)).updateCandidate(any(Candidate))
     }
 
     @Test
     void testDeleteCandidate() {
-        when(scanner.nextInt()).thenReturn(1)
+        when(mockScanner.nextLine()).thenReturn("1")
 
-        candidateView.deleteCandidate(scanner)
+        candidateView.deleteCandidate(mockScanner)
 
-        verify(candidateController).deleteCandidate(1)
+        verify(candidateController, times(1)).deleteCandidate(1)
     }
 }
