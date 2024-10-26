@@ -13,6 +13,15 @@ class ConnectionFactory {
 
     private ConnectionFactory() {}
 
+    static {
+        try {
+            Class.forName("org.postgresql.Driver")
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace()
+            throw new RuntimeException("Driver do PostgreSQL não encontrado!", e)
+        }
+    }
+
     static Connection getConnection() {
         if (connection == null || connection.isClosed()) {
             try {
