@@ -3,6 +3,7 @@ package org.example.Controllers
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import jakarta.servlet.ServletException
+import jakarta.servlet.annotation.WebServlet
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -12,6 +13,7 @@ import org.example.Models.Candidate
 
 import java.time.LocalDate
 
+@WebServlet
 class CandidateController extends HttpServlet {
     private final CandidateDAO candidateDAO
 
@@ -27,7 +29,7 @@ class CandidateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String json = request.reader.text
-            def jsonMap = new JsonSlurper().parseText(json)
+            Map jsonMap = new JsonSlurper().parseText(json)
 
             String nomeCompleto = jsonMap.nomeCompleto
             LocalDate dataNascimento = LocalDate.parse(jsonMap.dataNascimento)
@@ -87,7 +89,7 @@ class CandidateController extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String json = request.reader.text
-            def jsonMap = new JsonSlurper().parseText(json)
+            Map jsonMap = new JsonSlurper().parseText(json)
 
             int id = jsonMap.id
             String nomeCompleto = jsonMap.nomeCompleto

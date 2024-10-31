@@ -1,66 +1,112 @@
 package org.example.Controllers
 
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.example.ClassesDAO.CompetenceDAO
 import org.example.Models.Competence
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
+import java.io.BufferedReader
+import java.io.PrintWriter
+import java.io.StringReader
+import java.io.StringWriter
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.mockito.ArgumentMatchers.any
 import static org.mockito.Mockito.*
 
 class CompetenceControllerTest {
 
-    CompetenceDAO competenceDAO
-    CompetenceController competenceController
+    @Mock
+    private CompetenceDAO competenceDAO
+
+    @Mock
+    private HttpServletRequest request
+
+    @Mock
+    private HttpServletResponse response
+
+    @InjectMocks
+    private CompetenceController competenceController
+
+    private StringWriter responseWriter
 
     @BeforeEach
     void setUp() {
-        competenceDAO = mock(CompetenceDAO)
-        competenceController = new CompetenceController(competenceDAO)
+        MockitoAnnotations.openMocks(this)
+        responseWriter = new StringWriter()
+        PrintWriter writer = new PrintWriter(responseWriter)
+        when(response.getWriter()).thenReturn(writer)
     }
 
     @Test
-    void testCreateCompetence() {
-        Competence competence = new Competence(1, "Java Programming")
+    void testDoPost() throws Exception {
+        String jsonInput = JsonOutput.toJson([
+                nome: "Java"
+        ])
 
-        competenceController.createCompetence(competence)
+        when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jsonInput)))
 
-        verify(competenceDAO).create(competence)
+        competenceController.doPost(request, response)
+
+        verify(competenceDAO, times(1)).create(any(Competence.class))
+        assertTrue(responseWriter.toString().contains("Competência criada com sucesso."))
     }
 
     @Test
-    void testUpdateCompetence() {
-        Competence competence = new Competence(1, "Advanced Java Programming")
+    void testDoGet() throws Exception {
+        int id = 1
+        when(request.getParameter("id")).thenReturn(String.valueOf(id))
 
-        competenceController.updateCompetence(competence)
+        Competence competence = new Competence(id, "Java")
+        when(competenceDAO.getById(id)).thenReturn(competence)
 
-        verify(competenceDAO).update(competence)
+        competenceController.doGet(request, response)
+
+        verify(competenceDAO, times(1)).getById(id)
+
+        String jsonResponse = responseWriter.toString()
+        println("JSON Response: $jsonResponse")
+
+        def jsonParsed = new JsonSlurper().parseText(jsonResponse)
+        assertEquals("Java", jsonParsed.nome)
     }
 
     @Test
-    void testGetCompetenceById() {
-        Competence competence = new Competence(1, "Java Programming")
-        when(competenceDAO.getById(1)).thenReturn(competence)
+    void testDoPut() throws Exception {
+        int id = 1
+        String jsonInput = JsonOutput.toJson([
+                id: id,
+                nome: "Java Avançado"
+        ])
+        when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jsonInput)))
 
-        Competence result = competenceController.getCompetenceById(1)
+        Competence competence = new Competence(id, "Java")
+        when(competenceDAO.getById(id)).thenReturn(competence)
 
-        assert result == competence
-        verify(competenceDAO).getById(1)
+        competenceController.doPut(request, response)
+
+        verify(competenceDAO, times(1)).update(any(Competence.class))
+        assertTrue(responseWriter.toString().contains("Competência atualizada com sucesso."))
     }
 
     @Test
-    void testGetCompetenceByIdNotFound() {
-        when(competenceDAO.getById(1)).thenReturn(null)
+    void testDoDelete() throws Exception {
+        int id = 1
+        when(request.getParameter("id")).thenReturn(String.valueOf(id))
+        Competence competence = new Competence(id, "Java")
+        when(competenceDAO.getById(id)).thenReturn(competence)
 
-        Competence result = competenceController.getCompetenceById(1)
+        competenceController.doDelete(request, response)
 
-        assert result == null
-        verify(competenceDAO).getById(1)
-    }
-
-    @Test
-    void testDeleteCompetence() {
-        competenceController.deleteCompetence(1)
-
-        verify(competenceDAO).delete(1)
+        verify(competenceDAO, times(1)).delete(id)
+        assertTrue(responseWriter.toString().contains("Competência excluída com sucesso."))
     }
 }

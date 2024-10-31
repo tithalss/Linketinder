@@ -27,7 +27,7 @@ class CompanyController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String json = request.reader.text
-            def jsonMap = new JsonSlurper().parseText(json)
+            Map jsonMap = new JsonSlurper().parseText(json)
 
             String nome = jsonMap.nome
             String email = jsonMap.email
@@ -85,7 +85,7 @@ class CompanyController extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String json = request.reader.text
-            def jsonMap = new JsonSlurper().parseText(json)
+            Map jsonMap = new JsonSlurper().parseText(json)
 
             int id = jsonMap.id
             String nome = jsonMap.nome
