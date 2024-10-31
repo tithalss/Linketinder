@@ -42,9 +42,9 @@ class JobDAO implements GenericDAO<Job>{
                         resultSet.getInt("id"),
                         resultSet.getString("cargo"),
                         resultSet.getString("descricao"),
+                        resultSet.getString("local"),
                         resultSet.getInt("id_empresa")
                 )
-                job.setLocal(resultSet.getString("local"))
             }
         } catch (SQLException e) {
             e.printStackTrace()

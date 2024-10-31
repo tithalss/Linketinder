@@ -32,9 +32,9 @@ class JobController extends HttpServlet {
             String cargo = jsonMap.cargo
             String descricao = jsonMap.descricao
             String local = jsonMap.local
-            int id_empresa = Integer.parseInt(jsonMap.id_empresa)
+            int idEmpresa = Integer.parseInt(jsonMap.idEmpresa)
 
-            Job job = new Job(cargo, descricao, local, id_empresa)
+            Job job = new Job(cargo, descricao, local, idEmpresa)
 
             jobDAO.create(job)
             response.status = HttpServletResponse.SC_CREATED
@@ -84,13 +84,13 @@ class JobController extends HttpServlet {
             String json = request.reader.text
             def jsonMap = new JsonSlurper().parseText(json)
 
-            int id = jsonMap.id
+            int id = Integer.parseInt(jsonMap.id)
             String cargo = jsonMap.cargo
             String descricao = jsonMap.descricao
             String local = jsonMap.local
-            int id_empresa = Integer.parseInt(jsonMap.id_empresa)
+            int idEmpresa = Integer.parseInt(jsonMap.idEmpresa)
 
-            Job job = new Job(cargo, descricao, local, id_empresa)
+            Job job = new Job(id, cargo, descricao, local, idEmpresa)
             Job existingJob = jobDAO.getById(id)
 
             if (existingJob != null) {
